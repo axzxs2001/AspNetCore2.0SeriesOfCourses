@@ -1,11 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PPT", "PPT", "{1D904BA9-D13A-4C4B-AD45-6A254AF3FE4B}"
 	ProjectSection(SolutionItems) = preProject
 		PPT\asp.net core(一).pptx = PPT\asp.net core(一).pptx
+		..\..\..\..\..\Users\gsw\Desktop\asp.net core(二).pptx = ..\..\..\..\..\Users\gsw\Desktop\asp.net core(二).pptx
 	EndProjectSection
 EndProject
 Global

@@ -1,0 +1,19 @@
+﻿@{
+
+    Layout = null;
+}
+<html>
+<head>
+    <title>登录</title>
+</head>
+<body>
+    <form method="post" action="/login">
+        <input name="username" type="text"/>
+        <input name="password" type="password"/>
+        <input type="submit" value="登录"/>
+        <span style="color:red">@ViewBag.error</span>
+    </form>
+</body>
+</html>
+
+

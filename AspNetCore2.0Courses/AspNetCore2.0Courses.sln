@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PPT", "PPT", "{1D904BA9-D13A-4C4B-AD45-6A254AF3FE4B}"
 	ProjectSection(SolutionItems) = preProject
@@ -9,9 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PPT", "PPT", "{1D904BA9-D13
 		PPT\asp.net core(二).pptx = PPT\asp.net core(二).pptx
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PermissionDemo", "PermissionDemo\PermissionDemo.csproj", "{CDF94D98-51E1-412D-BC6F-2A2967F2C08C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PermissionDemo", "PermissionDemo\PermissionDemo.csproj", "{CDF94D98-51E1-412D-BC6F-2A2967F2C08C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PermissionMiddlewareDemo", "PermissionMiddlewareDemo\PermissionMiddlewareDemo.csproj", "{2B04F810-6B0B-4EED-8854-71312E3ADB15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PermissionMiddlewareDemo", "PermissionMiddlewareDemo\PermissionMiddlewareDemo.csproj", "{2B04F810-6B0B-4EED-8854-71312E3ADB15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFSqlDemo", "EFSqlDemo\EFSqlDemo.csproj", "{71796B59-FFB4-4008-8393-D68F3A96DA1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{2B04F810-6B0B-4EED-8854-71312E3ADB15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B04F810-6B0B-4EED-8854-71312E3ADB15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B04F810-6B0B-4EED-8854-71312E3ADB15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71796B59-FFB4-4008-8393-D68F3A96DA1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71796B59-FFB4-4008-8393-D68F3A96DA1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71796B59-FFB4-4008-8393-D68F3A96DA1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71796B59-FFB4-4008-8393-D68F3A96DA1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

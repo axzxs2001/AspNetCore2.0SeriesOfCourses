@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PPT", "PPT", "{1D904BA9-D13A-4C4B-AD45-6A254AF3FE4B}"
 	ProjectSection(SolutionItems) = preProject
 		PPT\asp.net core(一).pptx = PPT\asp.net core(一).pptx
+		PPT\asp.net core(三).pptx = PPT\asp.net core(三).pptx
 		PPT\asp.net core(二).pptx = PPT\asp.net core(二).pptx
 	EndProjectSection
 EndProject
@@ -13,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PermissionDemo", "Permissio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PermissionMiddlewareDemo", "PermissionMiddlewareDemo\PermissionMiddlewareDemo.csproj", "{2B04F810-6B0B-4EED-8854-71312E3ADB15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFSqlDemo", "EFSqlDemo\EFSqlDemo.csproj", "{71796B59-FFB4-4008-8393-D68F3A96DA1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFSqlDemo", "EFSqlDemo\EFSqlDemo.csproj", "{71796B59-FFB4-4008-8393-D68F3A96DA1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

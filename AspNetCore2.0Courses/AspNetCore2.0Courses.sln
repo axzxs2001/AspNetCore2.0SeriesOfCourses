@@ -5,10 +5,11 @@ VisualStudioVersion = 15.0.27004.2006
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PPT", "PPT", "{1D904BA9-D13A-4C4B-AD45-6A254AF3FE4B}"
 	ProjectSection(SolutionItems) = preProject
-		PPT\asp.net core(一).pptx = PPT\asp.net core(一).pptx
-		PPT\asp.net core(三).pptx = PPT\asp.net core(三).pptx
-		PPT\asp.net core(二).pptx = PPT\asp.net core(二).pptx
-		PPT\asp.net core(四).pptx = PPT\asp.net core(四).pptx
+		PPT\asp.net core(一)概述.pptx = PPT\asp.net core(一)概述.pptx
+		PPT\asp.net core(三)ORM.pptx = PPT\asp.net core(三)ORM.pptx
+		PPT\asp.net core(二)依赖注入和中间件.pptx = PPT\asp.net core(二)依赖注入和中间件.pptx
+		PPT\asp.net core(五)单元测试.pptx = PPT\asp.net core(五)单元测试.pptx
+		PPT\asp.net core(四)权限管理.pptx = PPT\asp.net core(四)权限管理.pptx
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PermissionDemo", "PermissionDemo\PermissionDemo.csproj", "{CDF94D98-51E1-412D-BC6F-2A2967F2C08C}"

@@ -14,8 +14,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PermissionDemo", "Permissio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PermissionMiddlewareDemo", "PermissionMiddlewareDemo\PermissionMiddlewareDemo.csproj", "{2B04F810-6B0B-4EED-8854-71312E3ADB15}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFSqlDemo", "EFSqlDemo\EFSqlDemo.csproj", "{71796B59-FFB4-4008-8393-D68F3A96DA1C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,10 +28,6 @@ Global
 		{2B04F810-6B0B-4EED-8854-71312E3ADB15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B04F810-6B0B-4EED-8854-71312E3ADB15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B04F810-6B0B-4EED-8854-71312E3ADB15}.Release|Any CPU.Build.0 = Release|Any CPU
-		{71796B59-FFB4-4008-8393-D68F3A96DA1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{71796B59-FFB4-4008-8393-D68F3A96DA1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{71796B59-FFB4-4008-8393-D68F3A96DA1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{71796B59-FFB4-4008-8393-D68F3A96DA1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

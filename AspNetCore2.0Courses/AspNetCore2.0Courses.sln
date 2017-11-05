@@ -8,6 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PPT", "PPT", "{1D904BA9-D13
 		PPT\asp.net core(一).pptx = PPT\asp.net core(一).pptx
 		PPT\asp.net core(三).pptx = PPT\asp.net core(三).pptx
 		PPT\asp.net core(二).pptx = PPT\asp.net core(二).pptx
+		PPT\asp.net core(四).pptx = PPT\asp.net core(四).pptx
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PermissionDemo", "PermissionDemo\PermissionDemo.csproj", "{CDF94D98-51E1-412D-BC6F-2A2967F2C08C}"
@@ -20,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCoreSqlDemo01", "EFCoreSq
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCoreSqliteDemo", "EFCoreSqliteDemo\EFCoreSqliteDemo.csproj", "{FA63EAAD-5E97-4F95-89E3-3D0BF37A7EF8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DapperDemo", "DapperDemo\DapperDemo.csproj", "{3CA24A17-ED75-4056-9162-DDA1B93D0F78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DapperDemo", "DapperDemo\DapperDemo.csproj", "{3CA24A17-ED75-4056-9162-DDA1B93D0F78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

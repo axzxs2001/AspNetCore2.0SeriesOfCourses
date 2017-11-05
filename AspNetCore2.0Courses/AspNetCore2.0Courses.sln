@@ -14,6 +14,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PermissionDemo", "Permissio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PermissionMiddlewareDemo", "PermissionMiddlewareDemo\PermissionMiddlewareDemo.csproj", "{2B04F810-6B0B-4EED-8854-71312E3ADB15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCoreSqlDemo", "EFCoreSqlDemo\EFCoreSqlDemo.csproj", "{24131113-5343-4D5E-B671-95722328889F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCoreSqlDemo01", "EFCoreSqlDemo01\EFCoreSqlDemo01.csproj", "{267FD579-D7BB-437D-9D0B-120EEB4F700B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +32,14 @@ Global
 		{2B04F810-6B0B-4EED-8854-71312E3ADB15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B04F810-6B0B-4EED-8854-71312E3ADB15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B04F810-6B0B-4EED-8854-71312E3ADB15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24131113-5343-4D5E-B671-95722328889F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24131113-5343-4D5E-B671-95722328889F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24131113-5343-4D5E-B671-95722328889F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24131113-5343-4D5E-B671-95722328889F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{267FD579-D7BB-437D-9D0B-120EEB4F700B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{267FD579-D7BB-437D-9D0B-120EEB4F700B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{267FD579-D7BB-437D-9D0B-120EEB4F700B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{267FD579-D7BB-437D-9D0B-120EEB4F700B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>在单元测试(Unit Test)时，如果使用Moq作为隔离框架，并需要模似(Mock) DbContext(Entity Framework Core)下的DbSet&lt;Entity&gt;，本项目给出了解决方案，可以用List&lt;Entity&gt;或Entity[]，模拟DbSet&lt;Entity&gt;完成测试操作。</Description>
+    <Authors>桂素伟</Authors>
+    <Company>桂素伟</Company>
+    <PackageProjectUrl>https://github.com/axzxs2001/MoqEFCoreExtension</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/axzxs2001/MoqEFCoreExtension</RepositoryUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
+    <Version>1.0.1</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.0" />
+    <PackageReference Include="Moq" Version="4.7.142" />
+  </ItemGroup>
+
+</Project>

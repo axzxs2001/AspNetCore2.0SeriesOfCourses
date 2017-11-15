@@ -1,0 +1,23 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>登录</title>
+</head>
+<body>
+
+    <form method="post" action="login">
+        <input type="text" name="username" />
+        <input type="password" name="password" />
+        <input type="submit" value="登录" />
+        <input type="hidden" value="@ViewBag.returnUrl" name="returnUrl"/>
+        <span style="color:red">@ViewBag.error</span>
+    </form>
+</body>
+</html>

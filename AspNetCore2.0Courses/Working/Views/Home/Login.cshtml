@@ -2,22 +2,61 @@
 @{
     Layout = null;
 }
-
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>登录</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <style>
+        .container{
+            height:600px;
+            width:100%;
+            background:url(/images/back.jpg) center bottom no-repeat;
+            position:relative;
+        }
+        .col-md-12{
+            margin-top:10px;
+            text-align:center;
+        }
+        .input-group{
+            width:300px;
+            margin:0 auto;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
 
-    <form method="post" action="login">
-        <input type="text" name="username" />
-        <input type="password" name="password" />
-        <input type="submit" value="登录" />
-        <input type="hidden" value="@ViewBag.returnUrl" name="returnUrl"/>
-        <span style="color:red">@ViewBag.error</span>
-    </form>
+        <form method="post" action="login">
+            <div class="row" style="margin-top:300px;">
+                <div class="col-md-12">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="sizing-addon2">用户名</span>
+                        <input type="text" class="form-control" name="username" placeholder="请输入用户名" aria-describedby="sizing-addon2">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="sizing-addon2">密　码</span>
+                        <input type="password" name="password" class="form-control" placeholder="请输入密码" aria-describedby="sizing-addon2">
+                    </div>
+                </div>
+                </div>
+            <div class="row" >
+                <div class="col-md-12" style="text-align:right;">
+                    <div class="input-group">
+                        <span style="color:red">@ViewBag.error</span>
+                        <button type="submit" class="btn btn-success">登录</button>
+                        </div>
+                    </div>
+                </div>
+            <input type="hidden" value="@ViewBag.returnUrl" name="returnUrl" />          
+        </form>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
 </body>
 </html>

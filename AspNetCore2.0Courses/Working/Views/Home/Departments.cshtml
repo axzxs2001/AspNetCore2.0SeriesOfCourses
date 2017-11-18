@@ -1,0 +1,233 @@
+﻿@{
+    ViewData["Title"] = "部门管理";
+}
+
+<div class="row">
+    <div class="panel panel-default" style="margin-bottom:-10px;">
+        <div class="panel-heading">
+            <h3 class="panel-title">部门管理</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-9">
+                </div>
+                <div class="col-md-3" style="text-align:right">
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#AddModal">
+                        添加
+                    </button>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom:-10px;margin-top:10px;">
+                <div class="col-md-12">
+                    <table class="table table-bordered table-hover  table-condensed table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width:50px;">编号</th>
+                                <th>部门名称</th>
+                                <th>上级部门名称</th>
+                                <th style="width:90px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="departmenttr">
+                            <tr is="department-row" v-for="department in departments" v-on:editdepartment="editdepartment" v-on:removedepartment="removedepartment" v-bind:department="department"></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModiyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="editdepartment">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
+                <h4 class="modal-title" id="modeltitle">修改部门</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" v-model="department.departmentname" placeholder="部门名称">
+                    </div>
+                    <div class="col-md-6">
+                        <select id="editpdepartmentselect" class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="savaEditBtn" class="btn btn-success" v-on:click="savaUser">
+                    保存
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="adddepartment">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
+                <h4 class="modal-title" id="modeltitle">添加部门</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">部门名称</span>
+                            <input id="adddeparmentname" type="text" class="form-control" placeholder="部门名称">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">上级部门</span>
+                            <select id="addpdepartmentselect" class="form-control">
+                                <option v-for="department in departments" v-bind:value="department.id">{{department.departmentname}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" onclick="SavaAdd()">
+                    保存
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+    <script type="text/x-template" id="department-tr">
+        <tr v-bind:id="'tr_' +department.id">
+            <td>{{department.id}}</td>
+            <td>{{department.departmentname}}</td>
+            <td>{{department.pdepartmentname}}</td>
+            <td>
+                <button class="btn btn-success btn-xs" v-on:click="editClick">编辑</button>
+                <button class="btn btn-danger btn-xs" v-on:click="removeClick">删除</button>
+            </td>
+        </tr>
+    </script>
+    <script>
+        $(function () {
+            LoadPDepartments();
+            LoadAddDepartmentSelect();
+        })
+        //加载部门表格
+        function LoadPDepartments() {
+            $.ajax({
+                method: "GET",
+                url: "/getallpdepartment",
+                data: {},
+                success: function (backData) {
+                    if (backData.result == 1) {
+
+                        new Vue({
+                            el: '#departmenttr',
+                            data: {
+                                departments: backData.data
+                            },
+                            methods: {
+                                editdepartment: function (department) {
+                                    console.log("编辑")
+                                    console.log(department)
+
+                                },
+                                removedepartment: function (department) {
+
+                                    console.log("删除")
+                                    console.log(department)
+                                }
+                            }
+                        })
+                    }
+                    else {
+                        alert(backData.message)
+
+                    }
+                },
+                error: function (error) {
+                    alert(error.stausText)
+                }
+            })
+
+        }
+        //tr组件
+        Vue.component("department-row", {
+            props: ["department"],
+            template: "#department-tr",
+            methods: {
+                editClick: function () {
+
+                    this.$emit('editdepartment', this.department)
+                },
+                removeClick: function () {
+
+                    this.$emit('removedepartment', this.department)
+                }
+            }
+        })
+        //加载添加的上级部门下拉列表
+        function LoadAddDepartmentSelect() {
+            $.ajax({
+                method: "GET",
+                url: "/getalldepartment",
+                data: {},
+                success: function (backData) {
+                    if (backData.result == 1) {
+
+                        new Vue({
+                            el: '#addpdepartmentselect',
+                            data: {
+                                departments: backData.data
+                            }
+                        })
+                    }
+                    else {
+                        alert(backData.message)
+
+                    }
+                },
+                error: function (error) {
+                    alert(error.stausText)
+                }
+            })
+
+        }
+        //添加部门
+        function SavaAdd() {
+            $.ajax({
+                method: "POST",
+                url: "adddepartment",
+                data: {
+                    departmentname: $("#adddeparmentname").val(),
+                    pdepartmentid: $("#addpdepartmentselect").val()
+
+                },
+                success: function (backData) {
+                    if (backData.result == 1) {                      
+                        window.location="/departments"
+
+                    } else {
+                        alert(backData.message)
+
+                    }
+                },
+                error: function (error) {
+                    alert(error.statusText);
+
+                }
+            })
+
+        }
+    </script>
+
+}

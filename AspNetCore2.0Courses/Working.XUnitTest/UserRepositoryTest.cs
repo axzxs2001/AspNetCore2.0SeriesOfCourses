@@ -53,7 +53,22 @@ namespace Working.XUnitTest
 
             Assert.Contains("用户名或密码错误！", exc.Message);
         }
+        /// <summary>
+        /// 测试登录用户名或密码错误
+        /// </summary>
+        [Fact]
+        public void Login_Unkonow_ThrowException()
+        {
+            var dbMock = new Mock<IDbConnection>();
+            var userRepository = new UserRepository(dbMock.Object, "");
 
+            var list = new List<UserRole>();
+            dbMock.SetupGet(db=>db.ConnectionString).Throws(new Exception("未知"));
+            var exc = Assert.Throws<Exception>(() => { userRepository.Login("gsw", "gsw"); });
+            Assert.Contains("未知", exc.Message);
+        }
         #endregion
+
+       
     }
 }

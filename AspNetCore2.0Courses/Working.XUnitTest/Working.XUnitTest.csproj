@@ -4,6 +4,8 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <StartupObject>Working.XUnitTest.UserRepositoryTest</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>

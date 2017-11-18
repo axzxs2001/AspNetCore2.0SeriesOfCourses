@@ -78,6 +78,8 @@ namespace Working
             services.AddScoped<IDbConnection, SqliteConnection>();
             //注入用户仓储
             services.AddScoped<IUserRepository, UserRepository>();
+            //注入部门仓储
+            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
         }
     }
 }

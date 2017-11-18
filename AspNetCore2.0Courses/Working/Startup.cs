@@ -11,6 +11,8 @@ using Microsoft.Data.Sqlite;
 using Working.Models.DataModel;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Working.Models.Repository;
+using System.Data;
 
 namespace Working
 {
@@ -27,12 +29,6 @@ namespace Working
         public void ConfigureServices(IServiceCollection services)
         {
 
-            //var connectionString = string.Format(Configuration.GetConnectionString("DefaultConnection"), System.IO.Directory.GetCurrentDirectory());
-
-            //using (var con = new SqliteConnection(connectionString))
-            //{
-            //    var roles = con.Query<Role>("select * from roles").ToList();
-            //}
             //验证注放
             services.AddAuthentication(opts =>
             {
@@ -42,8 +38,8 @@ namespace Working
                 opt.LoginPath = new PathString("/login");
                 opt.Cookie.Path = "/";
             });
-    
-            
+
+            AddRepository(services);
             services.AddMvc();
         }
 
@@ -68,6 +64,16 @@ namespace Working
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+        /// <summary>
+        /// 注放仓储
+        /// </summary>
+        /// <param name="services">服务容器</param>
+        void AddRepository(IServiceCollection services)
+        {
+        
+            //注入用户仓储
+            services.AddScoped<IUserRepository, UserRepository>();
         }
     }
 }

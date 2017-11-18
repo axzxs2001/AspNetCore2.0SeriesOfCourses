@@ -30,5 +30,18 @@ namespace Working.Models.Repository
         /// <param name="department">部门</param>
         /// <returns></returns>
         bool AddDepartment(Department department);
+        /// <summary>
+        /// 修改部门
+        /// </summary>
+        /// <param name="department">部门</param>
+        /// <returns></returns>
+        bool ModifyDepartment(Department department);
+        /// <summary>
+        /// 删除部门
+        /// </summary>
+        /// <param name="departmentID">部门ID</param>
+        /// <returns></returns>
+        bool RemoveDepartment(int departmentID);
+
     }
 }

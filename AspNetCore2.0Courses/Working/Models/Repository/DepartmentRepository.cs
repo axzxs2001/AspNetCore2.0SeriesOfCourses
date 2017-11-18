@@ -46,7 +46,26 @@ namespace Working.Models.Repository
         /// <returns></returns>
         public bool AddDepartment(Department department)
         {
-            return _dbConnection.Execute("insert into departments(departmentname,pdepartmentid) values(@departmentname,@pdepartmentid)",new { departmentname=department.DepartmentName, pdepartmentid=department.PDepartmentID }) > 0;
+            return _dbConnection.Execute("insert into departments(departmentname,pdepartmentid) values(@departmentname,@pdepartmentid)", new { departmentname = department.DepartmentName, pdepartmentid = department.PDepartmentID }) > 0;
+        }
+
+        /// <summary>
+        /// 修改部门
+        /// </summary>
+        /// <param name="department">部门</param>
+        /// <returns></returns>
+        public bool ModifyDepartment(Department department)
+        {
+            return _dbConnection.Execute("update departments set departmentname=@departmentname,pdepartmentid=@pdepartmentid where id=@id", new { departmentname = department.DepartmentName, pdepartmentid = department.PDepartmentID, id = department.ID }) > 0;
+        }
+        /// <summary>
+        /// 删除部门
+        /// </summary>
+        /// <param name="departmentID">部门ID</param>
+        /// <returns></returns>
+        public bool RemoveDepartment(int departmentID)
+        {
+            return _dbConnection.Execute("delete from departments where id=@id", new { id = departmentID }) > 0;
         }
     }
 }

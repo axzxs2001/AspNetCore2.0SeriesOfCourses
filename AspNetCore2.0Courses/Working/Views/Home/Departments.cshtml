@@ -52,12 +52,14 @@
                         <input type="text" class="form-control" v-model="department.departmentname" placeholder="部门名称">
                     </div>
                     <div class="col-md-6">
-                        <select id="editpdepartmentselect" class="form-control"></select>
+                        <select id="editpdepartmentselect" class="form-control">
+                            <option v-for="department in departments" v-bind:value="department.id">{{department.departmentname}}</option>
+                        </select>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="savaEditBtn" class="btn btn-success" v-on:click="savaUser">
+                <button id="savaEditBtn" class="btn btn-success" v-on:click="savaDepartment">
                     保存
                 </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -120,6 +122,7 @@
         $(function () {
             LoadPDepartments();
             LoadAddDepartmentSelect();
+            LoadModifyDepartmentSelect();
         })
         //加载部门表格
         function LoadPDepartments() {
@@ -137,14 +140,13 @@
                             },
                             methods: {
                                 editdepartment: function (department) {
-                                    console.log("编辑")
-                                    console.log(department)
+
+                                    DepartmentEdit(department);
 
                                 },
                                 removedepartment: function (department) {
 
-                                    console.log("删除")
-                                    console.log(department)
+                                    DepartmentRemove(department);
                                 }
                             }
                         })
@@ -213,8 +215,8 @@
 
                 },
                 success: function (backData) {
-                    if (backData.result == 1) {                      
-                        window.location="/departments"
+                    if (backData.result == 1) {
+                        window.location = "/departments"
 
                     } else {
                         alert(backData.message)
@@ -228,6 +230,130 @@
             })
 
         }
+
+
+        var pdepartmentVue = null;
+        //加载添加的上级部门下拉列表
+        function LoadModifyDepartmentSelect() {
+            $.ajax({
+                method: "GET",
+                url: "/getalldepartment",
+                data: {},
+                success: function (backData) {
+                    if (backData.result == 1) {
+
+                        pdepartmentVue = new Vue({
+                            el: '#editpdepartmentselect',
+                            data: {
+                                departments: backData.data
+                            }
+                        })
+
+                        $("#editpdepartmentselect").attr("v-model", "pdepartmentid")
+                    }
+                    else {
+                        alert(backData.message)
+
+                    }
+                },
+                error: function (error) {
+                    alert(error.stausText)
+                }
+            })
+
+        }
+
+
+        var editVue = null;
+        //修改部门
+        function DepartmentEdit(department) {
+            if (editVue == null) {
+                editVue = new Vue({
+                    el: "#editdepartment",
+                    data: {
+                        pdepartmentid: department.pdepartmentid,
+                        department: department
+                    },
+                    methods: {
+                        savaDepartment: function () {
+                            this.department.pdepartmentid = $("#editpdepartmentselect").val();
+                            $.ajax({
+                                method: "PUT",
+                                url: "/modifydepartment",
+                                data: {
+                                    department: this.department
+                                },
+                                success: function (backData) {
+                                    if (backData.result == 1) {
+
+
+                                    } else {
+                                        alert(backData.message);
+                                    }
+                                    $("#ModiyModal").modal("hide");
+                                },
+                                error: function (error) {
+                                    alert(error.statusText);
+                                }
+                            })
+                        }
+                    },
+                    watch: {
+                        pdepartmentid: function (newpdepartmentid) {
+                            if (this.department.id == newpdepartmentid) {
+                                $("#savaEditBtn").attr("disabled", "disabled");
+                                alert("不能选自己作为自己的父部门编号")
+
+                            }
+                            else {
+                                $("#savaEditBtn").removeAttr("disabled");
+                                this.department.pdepartmentid = newpdepartmentid;
+                                this.department.pdepartmentname = $("#editpdepartmentselect").find("option:selected").text();
+                            }
+
+                        }
+
+                    }
+
+                })
+            }
+            else {
+                editVue.department = department;
+
+            }
+            $("#ModiyModal").modal("show");
+            editVue.pdepartmentid = department.pdepartmentid;
+            $("#editpdepartmentselect").val(department.pdepartmentid);
+
+        }
+
+        //删除部门
+        function DepartmentRemove(department) {
+            if (confirm("确定要删除：" + department.departmentname + "?")) {
+
+                $.ajax({
+                    method: "DELETE",
+                    url: "/removedepartment",
+                    data: {
+                        departmentid: department.id
+                    },
+                    success: function (backData) {
+                        if (backData.result == 1) {
+                            $("#tr_" + department.id).remove();
+
+                        } else {
+                            alert(backData.message);
+                        }
+                        $("#ModiyModal").modal("hide");
+                    },
+                    error: function (error) {
+                        alert(error.statusText);
+                    }
+                })
+            }
+
+        }
+
     </script>
 
 }

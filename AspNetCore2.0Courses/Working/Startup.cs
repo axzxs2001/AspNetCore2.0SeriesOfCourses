@@ -71,7 +71,11 @@ namespace Working
         /// <param name="services">服务容器</param>
         void AddRepository(IServiceCollection services)
         {
-        
+            //注放连接字符串
+             var connectionString = string.Format(Configuration.GetConnectionString("DefaultConnection"), System.IO.Directory.GetCurrentDirectory());
+            services.AddSingleton(connectionString);
+            //sqlieconnection注放
+            services.AddScoped<IDbConnection, SqliteConnection>();
             //注入用户仓储
             services.AddScoped<IUserRepository, UserRepository>();
         }

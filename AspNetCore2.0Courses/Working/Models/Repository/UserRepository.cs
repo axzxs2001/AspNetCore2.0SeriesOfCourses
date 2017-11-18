@@ -16,14 +16,13 @@ namespace Working.Models.Repository
     public class UserRepository : IUserRepository
     {
         /// <summary>
-        /// 连接字符串
+        /// 连接对象
         /// </summary>
-        string _connectionString;
-        public UserRepository(IConfiguration configuration)
+        IDbConnection _dbConnection;
+        public UserRepository(IDbConnection dbConnection, string connectionString)
         {
-            var connectionString = string.Format(configuration.GetConnectionString("DefaultConnection"), System.IO.Directory.GetCurrentDirectory());
-        
-            _connectionString = connectionString;
+            dbConnection.ConnectionString = connectionString;
+            _dbConnection = dbConnection;
 
         }
         /// <summary>
@@ -34,9 +33,8 @@ namespace Working.Models.Repository
         /// <returns></returns>
         public UserRole Login(string userName, string password)
         {
-            using (var con = new SqliteConnection())
-            {
-                var userRole = con.Query<UserRole>("select users.*,roles.rolename from users join roles on users.roleid=roles.id where username=@username and password=@password", new { username = userName, password = password }).SingleOrDefault();
+           
+                var userRole = _dbConnection.Query<UserRole>("select users.*,roles.rolename from users join roles on users.roleid=roles.id where username=@username and password=@password", new { username = userName, password = password }).SingleOrDefault();
                 if (userRole == null)
                 {
                     throw new Exception("用户名或密码错误！");
@@ -45,7 +43,8 @@ namespace Working.Models.Repository
                 {
                     return userRole;
                 }
-            }
+            
         }
+
     }
 }

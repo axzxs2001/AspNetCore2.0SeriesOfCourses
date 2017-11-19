@@ -1,0 +1,250 @@
+﻿
+@{
+    ViewData["Title"] = "我的工作记录";
+}
+
+
+<h2>我的工作记录</h2>
+<div class="row">
+
+    <div class="col-md-3">
+        <select id="yearselect" class="form-control" v-model="selected" v-on:change="ChangeYear">
+            <option v-for="year in years" v-bind:value="year.value">{{year.name}}</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <select id="monthselect" class="form-control" v-model="selected" v-on:change="ChangeMonth">
+            <option v-for="month in months" v-bind:value="month.value">{{month.name}}</option>
+        </select>
+    </div>
+    <div class="col-md-6">
+
+    </div>
+</div>
+<hr style="border-color:#cccccc;" />
+<div class="row">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th style="width:125px;">日期</th>
+                <th>工作记录</th>
+                <th>备注</th>
+                <th style="width:50px">操作</th>
+            </tr>
+        </thead>
+        <tbody id="workitemtr"></tbody>
+    </table>
+</div>
+
+<!--编辑工作记录弹出框-->
+<div class="modal fade" id="editworkitem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="newworkitem">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myMod">
+                    编号工作记录
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <textarea rows="6" class="form-control" v-model="workitem.workcontent" placeholder="工作记录内容"></textarea>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:5px;">
+                    <div class="col-md-12">
+                        <textarea rows="4" class="form-control" v-model="workitem.memos" placeholder="备注"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success btn-sm" data-dismiss="modal" v-on:click="savaWorkItem">
+                    保存
+                </button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">
+                    取消
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+@section Scripts{
+
+    <script type="text/x-template" id="mywork-tr">
+        <tr v-bind:id="workitem.recorddate">
+            <td>{{workitem.recorddate}}</td>
+            <td>{{workitem.workcontent}}</td>
+            <td>{{workitem.memos}}</td>
+            <td>
+                <button class="btn btn-success btn-xs" v-on:click="editClick">编辑</button>
+            </td>
+        </tr>
+    </script>
+    <script>
+
+        $(function () {
+
+            var today = new Date();
+            var year = today.getFullYear();
+            var month = today.getMonth() + 1;
+
+            LoadYear(year);
+            LoadMonth(month);
+            QueryWorkItems(year, month);
+        })
+
+        var yearVue, monthVue;
+        //加载年
+        function LoadYear(year) {
+            yearVue = new Vue({
+                el: "#yearselect",
+                data: {
+                    selected: year,
+                    years: [
+                        { name: '2017年', value: '2017' },
+                        { name: '2018年', value: '2018' },
+                        { name: '2019年', value: '2019' },
+                        { name: '2020年', value: '2020' },
+                        { name: '2021年', value: '2021' },
+                        { name: '2022年', value: '2022' },
+                        { name: '2023年', value: '2023' }
+                    ]
+                },
+                methods: {
+                    ChangeYear: function () {
+                        QueryWorkItems(this.selected, monthVue.selected)
+
+                    }
+                }
+
+            })
+
+        }
+        //加载月
+        function LoadMonth(month) {
+            monthVue = new Vue({
+                el: "#monthselect",
+                data: {
+                    selected: month,
+                    months: [
+                        { name: '01月', value: '01' },
+                        { name: '02月', value: '02' },
+                        { name: '03月', value: '03' },
+                        { name: '04月', value: '04' },
+                        { name: '05月', value: '05' },
+                        { name: '06月', value: '06' },
+                        { name: '07月', value: '07' },
+                        { name: '08月', value: '08' },
+                        { name: '09月', value: '09' },
+                        { name: '10月', value: '10' },
+                        { name: '11月', value: '11' },
+                        { name: '12月', value: '12' },
+                    ]
+                },
+                methods: {
+                    ChangeMonth: function () {
+                        QueryWorkItems(yearVue.selected, this.selected)
+                    }
+                }
+
+            })
+
+        }
+
+        //tr组件
+        Vue.component("mywork-row", {
+            props: ["workitem"],
+            template: "#mywork-tr",
+            methods: {
+                editClick: function () {
+                    this.$emit("editworkitem", this.workitem);
+                }
+            }
+
+        })
+        //查询当月数据
+        function QueryWorkItems(year, month) {
+            $("#workitemtr").html('<tr is="mywork-row" v-for="workitem in workitems" v-on:editworkitem="editworkitem" v-bind:workitem="workitem"></tr>');
+            $.ajax({
+                type: "GET",
+                url: "/querymywork",
+                data: {
+                    year: year,
+                    month: month
+                },
+                success: function (backData) {
+                    if (backData.result == 1) {
+                        new Vue({
+                            el: "#workitemtr",
+                            data: {
+                                workitems: backData.data
+                            },
+                            methods: {
+                                editworkitem: function (workitem) {
+                                    WorkItemEdit(workitem);
+                                }
+                            }
+
+                        })
+
+                    } else {
+
+                        alert(backData.message)
+                    }
+
+                },
+                error: function (error) {
+                    alert(error.statusText);
+                }
+
+            })
+        }
+
+        var editVue = null;
+        //编辑工作项
+        function WorkItemEdit(workitem) {
+            if (editVue == null) {
+                editVue = new Vue({
+                    el: "#newworkitem",
+                    data: {
+                        workitem: workitem
+                    },
+                    methods: {
+                        savaWorkItem: function () {
+                            EditSavaWorkItem(this.workitem);
+                        }
+                    }
+                })
+
+            } else {
+                editVue.workitem = workitem;
+            }
+            $("#editworkitem").modal("show")
+        }
+        function EditSavaWorkItem(workitem) {
+            $.ajax({
+                method: 'POST',
+                url: '/addworkitem',
+                data: {
+                    workitem: workitem
+                },
+                success: function (backData) {
+                    if (backData.result == 1) {
+
+                        window.location="/myworks"
+                    } else {
+                        alert(backData.message);
+                    }
+                },
+                error: function (error) {
+                    alert(error.statusText);
+
+                }            
+            })
+        }
+
+    </script>
+}

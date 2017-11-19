@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Working.Models;
+using System.Security.Claims;
 
 namespace Working.Controllers
 {
@@ -24,6 +25,16 @@ namespace Working.Controllers
                 ContractResolver = new LowercaseContractResolver(),
                 DateFormatString = dataFormat
             });
+        }
+        /// <summary>
+        /// 登录人的用户ID
+        /// </summary>
+        protected string UserID
+        {
+            get
+            {
+                return User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Sid)?.Value;
+            }
         }
     }
 }

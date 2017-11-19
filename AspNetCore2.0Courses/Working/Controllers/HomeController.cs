@@ -32,33 +32,22 @@ namespace Working.Controllers
         /// 部门仓储
         /// </summary>
         readonly IDepartmentRepository _departmentRepository;
+        /// <summary>
+        /// 工作仓储
+        /// </summary>
+        readonly IWorkItemRepository _workItemRepository;
 
-        public HomeController(ILogger<HomeController> logger, IUserRepository userRepository, IDepartmentRepository departmentRepository)
+        public HomeController(ILogger<HomeController> logger, IUserRepository userRepository, IDepartmentRepository departmentRepository, IWorkItemRepository workItemRepository)
         {
             _logger = logger;
             _userRepository = userRepository;
             _departmentRepository = departmentRepository;
+            _workItemRepository = workItemRepository;
         }
 
         public IActionResult Index()
         {
             _logger.LogInformation("这是HomeController下的Index Action");
-
-            return View();
-        }
-
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        [Authorize(Roles = "Manager")]
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
 
             return View();
         }
@@ -106,6 +95,7 @@ namespace Working.Controllers
         #endregion
 
 
+        #region 部门
         [HttpGet("departments")]
         public IActionResult Departments()
         {
@@ -122,11 +112,11 @@ namespace Working.Controllers
             {
                 var list = _departmentRepository.GetAllPDepartment();
                 return ToJson(BackResult.Success, data: list);
-            
+
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
-                return ToJson(BackResult.Exception, message: exc.Message);           
+                return ToJson(BackResult.Exception, message: exc.Message);
             }
         }
 
@@ -159,7 +149,7 @@ namespace Working.Controllers
             try
             {
                 var result = _departmentRepository.AddDepartment(deparment);
-                return ToJson(result?BackResult.Success:BackResult.Fail,message:result?"添加成功":"添加失败");
+                return ToJson(result ? BackResult.Success : BackResult.Fail, message: result ? "添加成功" : "添加失败");
 
             }
             catch (Exception exc)
@@ -194,7 +184,7 @@ namespace Working.Controllers
         /// <param name="deparment">部门</param>
         /// <returns></returns>
         [HttpDelete("removedepartment")]
-        public IActionResult RemoveDepartment(int  departmentID)
+        public IActionResult RemoveDepartment(int departmentID)
         {
             try
             {
@@ -207,5 +197,63 @@ namespace Working.Controllers
                 return ToJson(BackResult.Exception, message: exc.Message);
             }
         }
+        #endregion
+
+        #region 我的工作
+        [HttpGet("myworks")]
+        public IActionResult MyWorks()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 按年月查询某人工作记录
+        /// </summary>
+        /// <param name="year">年</param>
+        /// <param name="month">月</param>
+        /// <returns></returns>
+        [HttpGet("querymywork")]
+        public IActionResult QueryMyWork(int year, int month)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(UserID))
+                {
+                    var workItems = _workItemRepository.GetWorkItemByYearMonth(year, month, int.Parse(UserID));
+                    return ToJson(BackResult.Success, data: workItems);
+                }
+                else
+                {
+                    return ToJson(BackResult.Error, message: "用户没有登录ID");
+                }
+            }
+            catch (Exception exc)
+            {
+                return ToJson(BackResult.Exception, message: exc.Message);
+            }
+        }
+
+        [HttpPost("addworkitem")]
+        public IActionResult AddWorkItem(WorkItem workItem)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(UserID))
+                {
+                    var result = _workItemRepository.AddWorkItem(workItem,int.Parse(UserID));
+                    return ToJson(result ? BackResult.Success : BackResult.Fail, message: result ? "编辑成功" : "编辑失败");
+                }
+                else
+                {
+                    return ToJson(BackResult.Error, message: "用户没有登录ID");
+                }
+
+            }
+            catch (Exception exc)
+            {
+                return ToJson(BackResult.Exception, message: exc.Message);
+            }
+        }
+        #endregion
     }
 }

@@ -80,8 +80,10 @@ namespace Working
             services.AddScoped<IUserRepository, UserRepository>();
             //注入部门仓储
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            //注放工作仓储
+            //注入工作仓储
             services.AddScoped<IWorkItemRepository, WorkItemRepository>();
+            //注放角色仓储
+            services.AddScoped<IRoleRepository, RoleRepository>();
         }
     }
 }

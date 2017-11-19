@@ -5,7 +5,11 @@
 
     <IsPackable>false</IsPackable>
 
-    <StartupObject>Working.XUnitTest.UserRepositoryTest</StartupObject>
+    <StartupObject></StartupObject>
+
+    <ApplicationIcon />
+
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>

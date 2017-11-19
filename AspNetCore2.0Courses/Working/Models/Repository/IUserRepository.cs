@@ -25,5 +25,32 @@ namespace Working.Models.Repository
         /// <param name="departmentID">部门ID</param>
         /// <returns></returns>
         List<User> GetUsersByDepartmentID(int departmentID);
+
+        /// <summary>
+        /// 添加用户
+        /// </summary>
+        /// <param name="user">用户</param>
+        /// <returns></returns>
+        bool AddUser(User user);
+        /// <summary>
+        /// 修改用户
+        /// </summary>
+        /// <param name="user">用户</param>
+        /// <returns></returns>
+        bool ModifyUser(User user);
+        /// <summary>
+        /// 删除用户
+        /// </summary>
+        /// <param name="user">用户</param>
+        /// <returns></returns>
+        bool RemoveUser(int userID);
+
+
+        /// <summary>
+        /// 查询全部门
+        /// </summary>
+        /// <returns></returns>
+        List<UserRole> GetDepartmentUsers(int departmentID);
+
     }
 }

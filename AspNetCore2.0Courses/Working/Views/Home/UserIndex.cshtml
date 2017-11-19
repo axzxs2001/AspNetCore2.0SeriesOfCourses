@@ -1,0 +1,389 @@
+﻿@{
+    ViewData["Title"] = "用户管理";
+}
+@section css{
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+}
+<div class="row">
+    <div class="panel panel-default" style="margin-bottom:-10px;">
+        <div class="panel-heading">
+            <h3 class="panel-title">用户管理</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <select id="departmentselect" class="form-control" v-cloak v-model="selected" v-on:change="ChangeDepartment">
+                        <option v-for="item in items" v-bind:value="item.id">{{item.departmentname}}</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                </div>
+                <div class="col-md-3" style="text-align:right">
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#AddModal">
+                        添加
+                    </button>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom:-10px;margin-top:10px;">
+                <div class="col-md-12">
+                    <table class="table table-bordered table-hover  table-condensed table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width:50px;">编号</th>
+                                <th>用户名</th>
+                                <th>姓名</th>
+                                <th>角色</th>
+                                <th style="width:90px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="usertr"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModiyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="edituser">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
+                <h4 class="modal-title" id="modeltitle">修改用户</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" v-model="user.name" placeholder="姓名">
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" v-model="user.username" placeholder="用户名">
+                    </div>
+                </div>
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-md-6">
+                        <select id="roleselect" class="form-control" v-cloak>
+                            <option v-for="item in items" v-bind:value="item.id">{{item.rolename}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" v-on:click="savaUser">
+                    保存
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
+                <h4 class="modal-title">修改用户</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="adddepartmentname" disabled="disabled">
+
+                    </div>
+                    <div class="col-md-6">
+                        <select id="addroleselect" class="form-control" v-cloak>
+                            <option v-for="item in items" v-bind:value="item.id">{{item.rolename}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="addname" placeholder="姓名">
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="addusername" placeholder="用户名">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" onclick="SavaAdd()">
+                    保存
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <!--tr模版-->
+    <script type="text/x-template" id="user-tr">
+        <tr v-bind:id="'tr_'+user.id">
+            <td>{{user.id}}</td>
+            <td>{{user.name}}</td>
+            <td>{{user.username}}</td>
+            <td>{{user.rolename}}</td>
+            <td>
+                <button class="btn btn-success btn-xs" v-on:click="editClick">编辑</button>
+                <button class="btn btn-danger btn-xs" v-on:click="removeClick">删除</button>
+            </td>
+        </tr>
+    </script>
+    <script>
+
+        function SavaAdd() {
+            $.ajax({
+                method: "POST",
+                url: 'adduser',
+                data: {
+                    name: $("#addname").val(),
+                    username: $("#addusername").val(),
+                    roleid: $("#addroleselect").val(),
+                    departmentid: $("#departmentselect").val()
+                },
+                success: function (backData) {
+                    if (backData.result == 1) {
+                        $("#ModiyModal").modal('hide');
+                        window.location = "/userindex"
+                    }
+                    else {
+                        alert(backData.message);
+                    }
+                },
+                error: function (error) {
+                    alert(error.statusText)
+                }
+            })
+        }
+        //用户组件
+        Vue.component("user-row", {
+            props: ["user"],
+            template: '#user-tr',
+            methods: {
+                editClick: function () {
+                    this.$emit('edituser', this.user)
+                },
+                removeClick: function () {
+                    this.$emit('removeuser', this.user)
+                }
+            }
+        })
+
+        //部门Vue
+        var departmentVue = null;
+        var editVue = null;
+        var roleVue = null;
+        //加载部门
+        function LoadDepartment() {
+            $.ajax({
+                method: "GET",
+                url: 'getalldepartment',
+                data: {
+                },
+                success: function (backData) {
+                    if (backData.result == 1) {
+                        if (departmentVue == null) {
+                            departmentVue = new Vue({
+                                el: '#departmentselect',
+                                data: {
+                                    selected: (backData.data.length > 0 ? backData.data[0].id : 0),
+                                    items: backData.data
+                                },
+                                methods: {
+                                    ChangeDepartment: function () {
+                                        $("#adddepartmentname").val($("#departmentselect").find("option:selected").text());
+                                        LoadUser(this.selected);
+                                    }
+                                }
+                            })
+                            $("#adddepartmentname").val($("#departmentselect").find("option:selected").text());
+                        }
+                        else {
+                            if (backData.data.length > 0) {
+                                departmentVue.selected = backData.data[0].id
+                            }
+                            departmentVue.items = backData.data;
+                        }
+                        LoadUser(departmentVue.selected);
+                    } else {
+                        alert(backData.message);
+                    }
+                },
+                error: function (error) {
+                    alert(error.statusText)
+                }
+            })
+        }
+        //加载部门
+        function LoadRole() {
+            $.ajax({
+                method: "GET",
+                url: 'roles',
+                data: {
+                },
+                success: function (backData) {
+                    if (backData.result == 1) {
+                        roleVue = new Vue({
+                            el: '#roleselect',
+                            data: {
+                                items: backData.data
+                            }
+                        })
+                        $("#roleselect").attr("v-model", "roleid")
+                    } else {
+                        alert(backData.message);
+                    }
+                },
+                error: function (error) {
+                    alert(error.statusText)
+                }
+            })
+        }
+        //加载角色
+        function LoadAddRole() {
+            $.ajax({
+                method: "GET",
+                url: 'roles',
+                data: {
+                },
+                success: function (backData) {
+                    if (backData.result == 1) {
+                        roleVue = new Vue({
+                            el: '#addroleselect',
+                            data: {
+                                items: backData.data
+                            }
+                        })
+                    } else {
+                        alert(backData.message);
+                    }
+                },
+                error: function (error) {
+                    alert(error.statusText)
+                }
+            })
+        }
+        //加载用户
+        function LoadUser(departmentID) {
+            $("#usertr").html('<tr is="user-row" v-for="user in users" v-on:edituser="edituser" v-on:removeuser="removeuser" v-bind:user="user"></tr>');
+            $.ajax({
+                method: "GET",
+                url: 'userroles',
+                data: {
+                    departmentID: departmentID
+                },
+                success: function (backData) {
+                    if (backData.result == 1) {
+                        new Vue({
+                            el: "#usertr",
+                            data: {
+                                users: backData.data
+                            },
+                            methods: {
+                                edituser: function (user) {
+                                    UserEdit(user);
+                                },
+                                removeuser: function (user) {
+                                    UserRemove(user);
+                                }
+                            }
+                        });
+
+                    } else {
+                        alert(backData.message);
+                    }
+                },
+                error: function (error) {
+                    alert(error.statusText)
+                }
+            })
+
+        }
+        //绑定新工作记录编辑
+        function UserEdit(user) {
+            if (editVue == null) {
+                editVue = new Vue({
+                    el: "#edituser",
+                    data: {
+                        roleid: user.roleid,
+                        user: user
+                    },
+                    methods: {
+                        savaUser: function () {
+                            this.user.roleid = $("#roleselect").val();
+                            $.ajax({
+                                method: "PUT",
+                                url: 'modifyuser',
+                                data: {
+                                    user: this.user
+                                },
+                                success: function (backData) {
+                                    if (backData.result == 1) {
+
+                                    } else {
+                                        alert(backData.message);
+                                    }
+                                    $("#ModiyModal").modal('hide');
+                                },
+                                error: function (error) {
+                                    alert(error.statusText)
+                                }
+                            })
+                        }
+                    },
+                    watch: {
+                        roleid: function (newroleid) {
+                            this.user.roleid = newroleid;
+                            this.user.rolename = $("#roleselect").find("option:selected").text();
+                        }
+                    }
+                });
+            }
+            else {
+                editVue.user = user;
+            }
+            $("#ModiyModal").modal('show');
+            //显示用户默认的角色
+            roleVue.selected = user.roleid;
+            $("#roleselect").val(user.roleid);
+        }
+
+        //绑定新工作记录删除
+        function UserRemove(user) {
+            if (confirm("确定要删除：" + user.name + "?")) {
+                $.ajax({
+                    method: "DELETE",
+                    url: 'removeuser',
+                    data: {
+                        userID: user.id
+                    },
+                    success: function (backData) {
+                        if (backData.result == 1) {
+                            $("#tr_" + user.id).remove();
+                            alert("删除成功！")
+                        } else {
+                            alert(backData.message);
+                        }
+                    },
+                    error: function (error) {
+                        alert(error.statusText)
+                    }
+                })
+            }
+        }
+        $(function () {
+            LoadRole();
+            LoadAddRole();
+            LoadDepartment();
+        })
+    </script>
+}

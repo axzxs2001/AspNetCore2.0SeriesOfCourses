@@ -36,13 +36,18 @@ namespace Working.Controllers
         /// 工作仓储
         /// </summary>
         readonly IWorkItemRepository _workItemRepository;
+        /// <summary>
+        /// 角色仓储
+        /// </summary>
+        readonly IRoleRepository _roleRepository;
 
-        public HomeController(ILogger<HomeController> logger, IUserRepository userRepository, IDepartmentRepository departmentRepository, IWorkItemRepository workItemRepository)
+        public HomeController(ILogger<HomeController> logger, IUserRepository userRepository, IDepartmentRepository departmentRepository, IWorkItemRepository workItemRepository,IRoleRepository roleRepository)
         {
             _logger = logger;
             _userRepository = userRepository;
             _departmentRepository = departmentRepository;
             _workItemRepository = workItemRepository;
+            _roleRepository = roleRepository;
         }
 
         public IActionResult Index()
@@ -330,6 +335,104 @@ namespace Working.Controllers
             }
         }
 
+        #endregion
+
+        #region 用户管理
+        [HttpGet("userindex")]
+        public IActionResult UserIndex()
+        {
+            return View();
+        }
+        /// <summary>
+        /// 按部分获取用户
+        /// </summary>
+        /// <param name="departmentID">部门ID</param>
+        /// <returns></returns>
+        [HttpGet("userroles")]
+        public IActionResult GetDepartmentUsers(int departmentID)
+        {
+            try
+            {
+                var users = _userRepository.GetDepartmentUsers(departmentID);
+                return ToJson(BackResult.Success, data: users);
+            }
+            catch (Exception exc)
+            {
+                return ToJson(BackResult.Exception, message: exc.Message);
+            }
+        }
+        /// <summary>
+        /// 查询全部角色
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("roles")]
+        public IActionResult GetRoles()
+        {
+            try
+            {
+                var roles = _roleRepository.GetRoles();
+                return ToJson(BackResult.Success, data: roles);
+            }
+            catch (Exception exc)
+            {
+                return ToJson(BackResult.Exception, message: exc.Message);
+            }
+
+        }
+        /// <summary>
+        /// 添加用户
+        /// </summary>
+        /// <param name="user">用户</param>
+        /// <returns></returns>
+        [HttpPost("adduser")]
+        public IActionResult AddUser(User user)
+        {
+            try
+            {              
+                var result = _userRepository.AddUser(user);
+                return ToJson(result?BackResult.Success:BackResult.Fail,data:result?  "添加成功":"添加失败");
+            }
+            catch (Exception exc)
+            {
+                return ToJson(BackResult.Exception, message: exc.Message);
+            }
+        }
+        /// <summary>
+        /// 修改用户
+        /// </summary>
+        /// <param name="user">用户</param>
+        /// <returns></returns>
+        [HttpPut("modifyuser")]
+        public IActionResult ModifyUser(User user)
+        {
+            try
+            {
+                var result = _userRepository.ModifyUser(user);
+                return ToJson(result ? BackResult.Success : BackResult.Fail, data: result ? "修改成功" : "修改失败");
+            }
+            catch (Exception exc)
+            {
+                return ToJson(BackResult.Exception, message: exc.Message);
+            }
+        }
+        /// <summary>
+        /// 删除用户
+        /// </summary>
+        /// <param name="userID">用户ID</param>
+        /// <returns></returns>
+        [HttpDelete("removeuser")]
+        public IActionResult RemoveUser(int userID)
+        {
+            try
+            {
+                var result = _userRepository.RemoveUser(userID);
+                return ToJson(result ? BackResult.Success : BackResult.Fail, data: result ? "删除成功" : "删除失败");
+            }
+            catch (Exception exc)
+            {
+                return ToJson(BackResult.Exception, message: exc.Message);
+            }
+        }
         #endregion
     }
 }

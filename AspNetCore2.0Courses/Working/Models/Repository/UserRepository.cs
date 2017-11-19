@@ -45,6 +45,16 @@ namespace Working.Models.Repository
                 }
             
         }
+        /// <summary>
+        /// 按部门查询用户
+        /// </summary>
+        /// <param name="departmentID">部门ID</param>
+        /// <returns></returns>
+
+        public List<User> GetUsersByDepartmentID(int departmentID)
+        {
+            return _dbConnection.Query<User>("select * from users where departmentid=@departmentid", new { departmentid = departmentID }).ToList();
+        }
 
     }
 }

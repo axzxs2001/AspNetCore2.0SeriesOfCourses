@@ -31,14 +31,14 @@
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Working</a>
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="MyWorks">我的工作</a></li>                   
+                <ul class="nav navbar-nav">                 
+                    <li><a asp-area="" asp-controller="Home" asp-action="MyWorks">我的工作</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="querydepartmentworks">部门工作查询</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Departments">部门管理</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a asp-area="" asp-controller="" asp-action="">登录用户：@User.Identity.Name</a></li>
-                 
+
                 </ul>
             </div>
         </div>

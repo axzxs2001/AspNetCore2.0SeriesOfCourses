@@ -67,5 +67,36 @@ namespace Working.Models.Repository
         {
             return _dbConnection.Execute("delete from departments where id=@id", new { id = departmentID }) > 0;
         }
+
+        /// <summary>
+        /// 按部门ID查询所有子部门
+        /// </summary>
+        /// <param name="departmentID">部门ID</param>
+        /// <returns></returns>
+        public List<Department> GetDeparmentByPID(int departmentID)
+        {
+            var departments = new List<Department>();
+            departments.AddRange(_dbConnection.Query<Department>("select * from departments where id=@id", new { id = departmentID }));
+            departments.AddRange(GetChildDeaprtment(departmentID));
+            return departments;
+        }
+        /// <summary>
+        /// 查询询子部门
+        /// </summary>
+        /// <param name="departmentID">部门ID</param>
+        /// <returns></returns>
+        List<Department> GetChildDeaprtment(int departmentID)
+        {
+            var departments = new List<Department>();
+            var childDepartments = _dbConnection.Query<Department>("select * from departments where PDepartmentID=@id", new { id = departmentID }).ToList();
+
+            departments.AddRange(childDepartments);
+            foreach (var department in childDepartments)
+            {
+                departments.AddRange(GetChildDeaprtment(department.ID));
+            }
+
+            return departments;
+        }
     }
 }

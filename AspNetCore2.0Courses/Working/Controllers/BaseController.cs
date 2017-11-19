@@ -36,5 +36,16 @@ namespace Working.Controllers
                 return User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Sid)?.Value;
             }
         }
+
+        /// <summary>
+        /// 登录人的部门ID
+        /// </summary>
+        protected string DepartmentID
+        {
+            get
+            {
+                return User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.GroupSid)?.Value;
+            }
+        }
     }
 }

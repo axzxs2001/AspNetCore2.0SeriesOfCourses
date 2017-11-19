@@ -43,5 +43,12 @@ namespace Working.Models.Repository
         /// <returns></returns>
         bool RemoveDepartment(int departmentID);
 
+        /// <summary>
+        /// 按部门ID查询所有子部门
+        /// </summary>
+        /// <param name="departmentID">部门ID</param>
+        /// <returns></returns>
+        List<Department> GetDeparmentByPID(int departmentID);
+
     }
 }

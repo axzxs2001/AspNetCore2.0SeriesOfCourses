@@ -79,7 +79,8 @@ namespace Working.Controllers
                 {
                     new Claim(ClaimTypes.Role,userRole.RoleName),
                     new Claim(ClaimTypes.Name,userRole.Name),
-                    new Claim(ClaimTypes.Sid,userRole.ID.ToString())
+                    new Claim(ClaimTypes.Sid,userRole.ID.ToString()),
+                    new Claim(ClaimTypes.GroupSid,userRole.DepartmentID.ToString()),
                 };
 
                 HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(new ClaimsIdentity(claims)));
@@ -240,7 +241,7 @@ namespace Working.Controllers
             {
                 if (!string.IsNullOrEmpty(UserID))
                 {
-                    var result = _workItemRepository.AddWorkItem(workItem,int.Parse(UserID));
+                    var result = _workItemRepository.AddWorkItem(workItem, int.Parse(UserID));
                     return ToJson(result ? BackResult.Success : BackResult.Fail, message: result ? "编辑成功" : "编辑失败");
                 }
                 else
@@ -254,6 +255,81 @@ namespace Working.Controllers
                 return ToJson(BackResult.Exception, message: exc.Message);
             }
         }
+        #endregion
+
+        #region 部门工作查询
+        [HttpGet("querydepartmentworks")]
+        public IActionResult QueryDepartmentWorks()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 获取登录用户的所有下属部门
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getchilddepartments")]
+        public IActionResult GetChildDepartments()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(DepartmentID))
+                {
+                    var departments = _departmentRepository.GetDeparmentByPID(int.Parse(DepartmentID));
+                    return ToJson(BackResult.Success, data: departments);
+                }
+                else
+                {
+                    return ToJson(BackResult.Error, message: "没有登录用户的部门ID");
+                }
+            }
+            catch (Exception exc)
+            {
+                return ToJson(BackResult.Exception, message: exc.Message);
+            }
+        }
+        /// <summary>
+        /// 按部门ID获取用户
+        /// </summary>
+        /// <param name="departmentID">部门ID</param>
+        /// <returns></returns>
+        [HttpGet("getuserbydepartmentid")]
+        public IActionResult GetUserByDepartmentID(int departmentID)
+        {
+            try
+            {
+                var users = _userRepository.GetUsersByDepartmentID(departmentID);
+                return ToJson(BackResult.Success, data: users);
+
+            }
+            catch (Exception exc)
+            {
+                return ToJson(BackResult.Exception, message: exc.Message);
+            }
+        }
+        /// <summary>
+        /// 按年月用户查询工作记录
+        /// </summary>
+        /// <param name="year">年</param>
+        /// <param name="month">月</param>
+        /// <param name="userID">用户ID</param>
+        /// <returns></returns>
+        [HttpGet("queryuserworks")]
+        public IActionResult QueryUserWorks(int year, int month, int userID)
+        {
+            try
+            {
+
+                var workItems = _workItemRepository.GetWorkItemByYearMonth(year, month, userID);
+                return ToJson(BackResult.Success, data: workItems);
+
+            }
+            catch (Exception exc)
+            {
+                return ToJson(BackResult.Exception, message: exc.Message);
+            }
+        }
+
         #endregion
     }
 }

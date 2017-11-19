@@ -18,5 +18,12 @@ namespace Working.Models.Repository
         /// <param name="password">密码</param>
         /// <returns></returns>
         UserRole Login(string userName, string password);
+
+        /// <summary>
+        /// 按部门查询用户
+        /// </summary>
+        /// <param name="departmentID">部门ID</param>
+        /// <returns></returns>
+        List<User> GetUsersByDepartmentID(int departmentID);
     }
 }

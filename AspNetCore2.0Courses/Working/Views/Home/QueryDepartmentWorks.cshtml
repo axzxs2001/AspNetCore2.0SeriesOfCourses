@@ -1,0 +1,256 @@
+﻿
+@{
+    ViewData["Title"] = "查询部门工作记录";
+}
+<h2>查询部门工作记录</h2>
+<div class="row">
+    <div class="col-md-3">
+        <select id="departmentselect" class="form-control" v-model="selected" v-on:change="ChangeDepartment">
+            <option v-for="department in departments" v-bind:value="department.id">{{department.departmentname}}</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <select id="userselect" class="form-control" v-model="selected" v-on:change="ChangeUser"><option v-for="user in users" v-bind:value="user.id">{{user.name}}</option></select>
+    </div>
+    <div class="col-md-3">
+        <select id="yearselect" class="form-control" v-cloak v-model="selected" v-on:change="ChangeYear">
+            <option v-for="item in items" v-bind:value="item.value">{{item.year}}</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <select id="monthselect" class="form-control" v-cloak v-model="selected" v-on:change="ChangeMonth">
+            <option v-for="item in items" v-bind:value="item.value">{{item.month}}</option>
+        </select>
+    </div>
+
+</div>
+<hr style="border-color:#cccccc;" />
+<div class="row">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th style="width:125px;">日期</th>
+                <th>工作记录</th>
+                <th>备注</th>
+                <th style="width:125px">创建日期</th>
+            </tr>
+        </thead>
+        <tbody id="workitemtr"></tbody>
+    </table>
+</div>
+
+@section Scripts{
+    <!--tr模版-->
+    <script type="text/x-template" id="mywork-tr">
+        <tr>
+            <td>{{workitem.recorddate}}</td>
+            <td>{{workitem.workcontent}}</td>
+            <td>{{workitem.memos}}</td>
+            <td>{{workitem.createtime}}</td>
+        </tr>
+    </script>
+
+    <script>
+        //年和月的Vue
+        var yearVue, monthVue, userVue = null;
+        var departmentVue = null;
+        //加载年下拉列表
+        function LoadYear(year) {
+            yearVue = new Vue({
+                el: '#yearselect',
+                data: {
+                    selected: year,
+                    items: [
+                        { year: '2017年', value: '2017' },
+                        { year: '2018年', value: '2018' },
+                        { year: '2019年', value: '2019' },
+                        { year: '2020年', value: '2020' },
+                        { year: '2021年', value: '2021' },
+                        { year: '2022年', value: '2022' },
+                        { year: '2023年', value: '2023' },
+
+                    ]
+                },
+                methods: {
+                    ChangeYear: function () {
+                        QueryWorkItems(this.selected, monthVue.selected, userVue.selected)
+                    }
+                }
+            })
+        }
+        //加载月下拉列表
+        function LoadMonth(month) {
+            monthVue = new Vue({
+                el: '#monthselect',
+                data: {
+                    selected: month,
+                    items: [
+                        { month: '01月', value: '01' },
+                        { month: '02月', value: '02' },
+                        { month: '03月', value: '03' },
+                        { month: '04月', value: '04' },
+                        { month: '05月', value: '05' },
+                        { month: '06月', value: '06' },
+                        { month: '07月', value: '07' },
+                        { month: '08月', value: '08' },
+                        { month: '09月', value: '09' },
+                        { month: '10月', value: '10' },
+                        { month: '11月', value: '11' },
+                        { month: '12月', value: '12' }
+                    ]
+                },
+                methods: {
+                    ChangeMonth: function () {
+                        QueryWorkItems(yearVue.selected, this.selected, userVue.selected)
+                    }
+                }
+            })
+        }
+
+        //工作记录组件
+        Vue.component("mywork-row", {
+            props: ["workitem"],
+            template: '#mywork-tr',
+            methods: {
+                editWorkItem: function () {
+                    WorkItemEdite(this.workitem);
+                }
+            }
+        })
+
+
+
+        //初始化
+        $(function () {
+            //获取当前年和月
+            var today = new Date();
+            var year = today.getFullYear();
+            var month = today.getMonth() + 1;
+            //加载年下拉列表
+            LoadYear(year);
+            //加载月下拉列表
+            LoadMonth(month);
+            //加载部门
+            LoadDepartment();
+
+
+        })
+
+        //按年月查询工作记录
+        function QueryWorkItems(year, month, userid) {
+            $("#workitemtr").html('<tr is="mywork-row" v-for="workitem in workitems" v-bind:workitem="workitem"></tr>');
+            $.ajax({
+                type: 'GET',
+                url: '/queryuserworks',
+                data: {
+                    userid: userid,
+                    year: year,
+                    month: month
+                },
+                success: function (dataBack) {
+                    if (dataBack.result == 1) {
+                        new Vue({
+                            el: "#workitemtr",
+                            data: {
+                                workitems: dataBack.data
+                            }
+                        });
+                    }
+                },
+                error: function (error) {
+                    alert(error.statusText);
+                }
+            })
+        }
+
+
+        var departmentVue = null;
+        function LoadDepartment() {
+            $.ajax({
+                method: 'GET',
+                url: "/getchilddepartments",
+                data: {},
+                success: function (backData) {
+
+                    if (backData.result == 1) {
+                        departmentVue = new Vue({
+                            el: "#departmentselect",
+                            data: {
+                                selected: (backData.data.length > 0 ? backData.data[0].id : 0),
+                                departments: backData.data
+                            },
+                            methods: {
+                                ChangeDepartment: function () {
+                                    LoadUser(this.selected);
+                                }
+                            }
+                        })
+
+                        LoadUser(departmentVue.selected);
+                    }
+                    else {
+                        alert(backData.message)
+
+                    }
+                },
+                error: function (error) {
+                    alert(error.statusText);
+                }
+
+            })
+
+        }
+
+        var userVue = null;
+        function LoadUser(departmentid) {
+            $.ajax({
+                method: 'GET',
+                url: '/getuserbydepartmentid',
+                data: {
+                    departmentid: departmentid
+                },
+                success: function (backData) {
+                    if (backData.result == 1) {
+                        if (userVue == null) {
+                            userVue = new Vue({
+                                el: "#userselect",
+                                data: {
+                                    selected: (backData.data.length > 0 ? backData.data[0].id : 0),
+                                    users: backData.data
+                                },
+                                methods: {
+                                    ChangeUser: function () {
+                                        QueryWorkItems(yearVue.selected, monthVue.selected, this.selected);
+                                    }
+                                }
+                            })
+
+                        } else {
+
+                            if (backData.data.length > 0) {
+                                userVue.selected = backData.data[0].id;
+
+                            } else {
+
+                                userVue.selected = 0;
+                            }
+                            userVue.users = backData.data;
+                        }
+
+                        QueryWorkItems(yearVue.selected, monthVue.selected, userVue.selected);
+
+                    } else {
+                        alert(backData.message)
+
+                    }
+
+                },
+                error: function (error) {
+                    alert(error.statusText);
+                }
+
+
+            })
+        }
+    </script>
+}

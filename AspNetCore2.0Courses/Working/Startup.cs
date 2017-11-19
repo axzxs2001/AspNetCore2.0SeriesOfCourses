@@ -72,7 +72,10 @@ namespace Working
         void AddRepository(IServiceCollection services)
         {
             //注放连接字符串
-             var connectionString = string.Format(Configuration.GetConnectionString("DefaultConnection"), System.IO.Directory.GetCurrentDirectory());
+            //var connectionString = string.Format(Configuration.GetConnectionString("DefaultConnection"), System.IO.Directory.GetCurrentDirectory());
+            //集成测试修改
+            var connectionString = string.Format("Data Source={0}/working_db.sqlite", System.IO.Directory.GetCurrentDirectory());
+
             services.AddSingleton(connectionString);
             //sqlieconnection注放
             services.AddScoped<IDbConnection, SqliteConnection>();

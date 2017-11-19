@@ -41,7 +41,7 @@ namespace Working.Controllers
         /// </summary>
         readonly IRoleRepository _roleRepository;
 
-        public HomeController(ILogger<HomeController> logger, IUserRepository userRepository, IDepartmentRepository departmentRepository, IWorkItemRepository workItemRepository,IRoleRepository roleRepository)
+        public HomeController(ILogger<HomeController> logger, IUserRepository userRepository, IDepartmentRepository departmentRepository, IWorkItemRepository workItemRepository, IRoleRepository roleRepository)
         {
             _logger = logger;
             _userRepository = userRepository;
@@ -78,7 +78,6 @@ namespace Working.Controllers
         {
             try
             {
-
                 var userRole = _userRepository.Login(userName, password);
                 var claims = new Claim[]
                 {
@@ -95,22 +94,26 @@ namespace Working.Controllers
             catch (Exception exc)
             {
                 ViewBag.error = exc.Message;
-                return View();
+
+                return  new ViewResult();              
+
             }
         }
         #endregion
 
 
         #region 部门
+        [Authorize(Roles = "Manager")]
         [HttpGet("departments")]
         public IActionResult Departments()
         {
-            return View();
+            return new ViewResult();
         }
         /// <summary>
         /// 获取全部带父级部门的部门
         /// </summary>
         /// <returns></returns>
+     
         [HttpGet("getallpdepartment")]
         public IActionResult GetAllPDepartments()
         {
@@ -149,6 +152,7 @@ namespace Working.Controllers
         /// </summary>
         /// <param name="deparment">部门</param>
         /// <returns></returns>
+        [Authorize(Roles = "Manager")]
         [HttpPost("adddepartment")]
         public IActionResult AddDepartment(Department deparment)
         {
@@ -169,6 +173,7 @@ namespace Working.Controllers
         /// </summary>
         /// <param name="deparment">部门</param>
         /// <returns></returns>
+        [Authorize(Roles = "Manager")]
         [HttpPut("modifydepartment")]
         public IActionResult ModifyDepartment(Department department)
         {
@@ -189,6 +194,7 @@ namespace Working.Controllers
         /// </summary>
         /// <param name="deparment">部门</param>
         /// <returns></returns>
+        [Authorize(Roles = "Manager")]
         [HttpDelete("removedepartment")]
         public IActionResult RemoveDepartment(int departmentID)
         {
@@ -206,6 +212,7 @@ namespace Working.Controllers
         #endregion
 
         #region 我的工作
+        [Authorize(Roles = "Manager")]
         [HttpGet("myworks")]
         public IActionResult MyWorks()
         {
@@ -338,6 +345,7 @@ namespace Working.Controllers
         #endregion
 
         #region 用户管理
+        [Authorize(Roles = "Manager")]
         [HttpGet("userindex")]
         public IActionResult UserIndex()
         {
@@ -348,6 +356,7 @@ namespace Working.Controllers
         /// </summary>
         /// <param name="departmentID">部门ID</param>
         /// <returns></returns>
+        [AllowAnonymous]
         [HttpGet("userroles")]
         public IActionResult GetDepartmentUsers(int departmentID)
         {
@@ -384,13 +393,14 @@ namespace Working.Controllers
         /// </summary>
         /// <param name="user">用户</param>
         /// <returns></returns>
+        [AllowAnonymous]//[Authorize(Roles = "Manager")]
         [HttpPost("adduser")]
         public IActionResult AddUser(User user)
         {
             try
-            {              
+            {
                 var result = _userRepository.AddUser(user);
-                return ToJson(result?BackResult.Success:BackResult.Fail,data:result?  "添加成功":"添加失败");
+                return ToJson(result ? BackResult.Success : BackResult.Fail, data: result ? "添加成功" : "添加失败");
             }
             catch (Exception exc)
             {
@@ -402,6 +412,7 @@ namespace Working.Controllers
         /// </summary>
         /// <param name="user">用户</param>
         /// <returns></returns>
+        [Authorize(Roles = "Manager")]
         [HttpPut("modifyuser")]
         public IActionResult ModifyUser(User user)
         {
@@ -420,6 +431,7 @@ namespace Working.Controllers
         /// </summary>
         /// <param name="userID">用户ID</param>
         /// <returns></returns>
+        [Authorize(Roles = "Manager")]
         [HttpDelete("removeuser")]
         public IActionResult RemoveUser(int userID)
         {

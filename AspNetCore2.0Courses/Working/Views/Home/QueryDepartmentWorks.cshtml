@@ -2,15 +2,22 @@
 @{
     ViewData["Title"] = "查询部门工作记录";
 }
+@section css{
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+}
 <h2>查询部门工作记录</h2>
 <div class="row">
     <div class="col-md-3">
-        <select id="departmentselect" class="form-control" v-model="selected" v-on:change="ChangeDepartment">
+        <select id="departmentselect" v-cloak class="form-control" v-model="selected" v-on:change="ChangeDepartment">
             <option v-for="department in departments" v-bind:value="department.id">{{department.departmentname}}</option>
         </select>
     </div>
     <div class="col-md-3">
-        <select id="userselect" class="form-control" v-model="selected" v-on:change="ChangeUser"><option v-for="user in users" v-bind:value="user.id">{{user.name}}</option></select>
+        <select id="userselect" v-cloak class="form-control" v-model="selected" v-on:change="ChangeUser"><option v-for="user in users" v-bind:value="user.id">{{user.name}}</option></select>
     </div>
     <div class="col-md-3">
         <select id="yearselect" class="form-control" v-cloak v-model="selected" v-on:change="ChangeYear">

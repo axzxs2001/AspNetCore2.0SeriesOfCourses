@@ -77,8 +77,12 @@ namespace Working
             var connectionString = string.Format("Data Source={0}/working_db.sqlite", System.IO.Directory.GetCurrentDirectory());
 
             services.AddSingleton(connectionString);
+            
             //sqlieconnection注放
+
             services.AddScoped<IDbConnection, SqliteConnection>();
+            //注放数据库
+            services.AddScoped<IWorkingDB, WorkingDB>();
             //注入用户仓储
             services.AddScoped<IUserRepository, UserRepository>();
             //注入部门仓储

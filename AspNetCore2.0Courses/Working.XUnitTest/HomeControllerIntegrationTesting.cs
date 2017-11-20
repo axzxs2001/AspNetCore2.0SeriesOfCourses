@@ -29,42 +29,42 @@ namespace Working.XUnitTest
             _client = _server.CreateClient();
         }
     
-        /// <summary>
-        /// get请求
-        /// </summary>
-        [Fact]
-        public void GetUserRoles_Default_Return()
-        {
-            var request = "/userroles?departmentID=1";
-            var response = _client.GetAsync(request).Result;
-            response.EnsureSuccessStatusCode();
-            var responseJson = response.Content.ReadAsStringAsync().Result;          
-            var backJson = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseJson>(responseJson);
-            Assert.Equal(2, (backJson.data as IList).Count);
-        }
-        /// <summary>
-        /// post请求
-        /// </summary>
-        [Fact]
-        public void AddUser_Default_Return()
-        {
-            var request = "/adduser";
-            var data = new Dictionary<string, string>();
+        ///// <summary>
+        ///// get请求
+        ///// </summary>
+        //[Fact]
+        //public void GetUserRoles_Default_Return()
+        //{
+        //    var request = "/userroles?departmentID=1";
+        //    var response = _client.GetAsync(request).Result;
+        //    response.EnsureSuccessStatusCode();
+        //    var responseJson = response.Content.ReadAsStringAsync().Result;          
+        //    var backJson = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseJson>(responseJson);
+        //    Assert.Equal(2, (backJson.data as IList).Count);
+        //}
+        ///// <summary>
+        ///// post请求
+        ///// </summary>
+        //[Fact]
+        //public void AddUser_Default_Return()
+        //{
+        //    var request = "/adduser";
+        //    var data = new Dictionary<string, string>();
            
-            data.Add("ID","1");
-            data.Add("DepartmentID", "2");
-            data.Add("RoleID", "1");
-            data.Add("UserName", "wangwu");
-            data.Add("Password", "wangwu");
-            data.Add("Name", "王五");
-            var content = new FormUrlEncodedContent(data);
+        //    data.Add("ID","1");
+        //    data.Add("DepartmentID", "2");
+        //    data.Add("RoleID", "1");
+        //    data.Add("UserName", "wangwu");
+        //    data.Add("Password", "wangwu");
+        //    data.Add("Name", "王五");
+        //    var content = new FormUrlEncodedContent(data);
 
-            var response = _client.PostAsync(request, content).Result;
-            response.EnsureSuccessStatusCode();
-            var responseJson = response.Content.ReadAsStringAsync().Result;
-            var backJson = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseJson>(responseJson);
-            Assert.Equal(1, backJson.result );
-        }
+        //    var response = _client.PostAsync(request, content).Result;
+        //    response.EnsureSuccessStatusCode();
+        //    var responseJson = response.Content.ReadAsStringAsync().Result;
+        //    var backJson = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseJson>(responseJson);
+        //    Assert.Equal(1, backJson.result );
+        //}
 
     }
 }

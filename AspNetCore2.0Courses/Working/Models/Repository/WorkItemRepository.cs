@@ -14,13 +14,12 @@ namespace Working.Models.Repository
     public class WorkItemRepository : IWorkItemRepository
     {
         /// <summary>
-        /// 连接对象
+        /// 数据库对象
         /// </summary>
-        IDbConnection _dbConnection;
-        public WorkItemRepository(IDbConnection dbConnection, string connectionString)
+        IWorkingDB _workingDB;
+        public WorkItemRepository(IWorkingDB workingDB)
         {
-            dbConnection.ConnectionString = connectionString;
-            _dbConnection = dbConnection;
+            _workingDB = workingDB;
 
         }
         /// <summary>
@@ -34,7 +33,7 @@ namespace Working.Models.Repository
         {
             var beginDT =DateTime.Parse( $"{year}-{month}-01 00:00:00.000");
             var endDT =DateTime.Parse( $"{year}-{month}-{DateTime.DaysInMonth(year, month)} 23:59:59.999");
-            var workItems = _dbConnection.Query<WorkItem>("select * from workitems where recorddate>=@begindt and recorddate<=@enddt and createuserid=@userid", new { begindt = beginDT, enddt = endDT, userid = userID }).ToList();
+            var workItems = _workingDB.Query<WorkItem>("select * from workitems where recorddate>=@begindt and recorddate<=@enddt and createuserid=@userid", new { begindt = beginDT, enddt = endDT, userid = userID }).ToList();
             var newWrokItems = new List<WorkItem>();
             for (int i = 1; i <= DateTime.DaysInMonth(year, month); i++)
             {
@@ -63,14 +62,14 @@ namespace Working.Models.Repository
         {
             var beginDay = DateTime.Parse($"{workItem.RecordDate.ToShortDateString()} 00:00:00.000");
             var endDay = DateTime.Parse($"{workItem.RecordDate.ToShortDateString()} 23:59:59.999");
-            var count = _dbConnection.Query<WorkItem>("select * from workitems where recorddate>=@begindt and recorddate<=@enddt and createuserid=@userid", new { begindt = beginDay, enddt = endDay, userid = userID }).Count();
+            var count = _workingDB.Query<WorkItem>("select * from workitems where recorddate>=@begindt and recorddate<=@enddt and createuserid=@userid", new { begindt = beginDay, enddt = endDay, userid = userID }).Count();
             if (count == 0)
             {
-                return _dbConnection.Execute("insert into workitems(createtime,createuserid,recorddate,workcontent,memos) values(@createtime,@createuserid,@recorddate,@workcontent,@memos)", new { createtime = DateTime.Now, createuserid = userID, recorddate = workItem.RecordDate, workcontent = workItem.WorkContent, memos = workItem.Memos }) > 0;
+                return _workingDB.Execute("insert into workitems(createtime,createuserid,recorddate,workcontent,memos) values(@createtime,@createuserid,@recorddate,@workcontent,@memos)", new { createtime = DateTime.Now, createuserid = userID, recorddate = workItem.RecordDate, workcontent = workItem.WorkContent, memos = workItem.Memos }) > 0;
             }
             else
             {
-                return _dbConnection.Execute("update  workitems set createtime=@createtime,createuserid=@createuserid,recorddate=@recorddate,workcontent=@workcontent,memos=@memos where id=@id", new { createtime = DateTime.Now, createuserid = userID, recorddate = workItem.RecordDate, workcontent = workItem.WorkContent, memos = workItem.Memos,id=workItem.ID }) > 0;
+                return _workingDB.Execute("update  workitems set createtime=@createtime,createuserid=@createuserid,recorddate=@recorddate,workcontent=@workcontent,memos=@memos where id=@id", new { createtime = DateTime.Now, createuserid = userID, recorddate = workItem.RecordDate, workcontent = workItem.WorkContent, memos = workItem.Memos,id=workItem.ID }) > 0;
             }
 
         }

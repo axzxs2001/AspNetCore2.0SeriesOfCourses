@@ -16,13 +16,13 @@ namespace Working.Models.Repository
     public class UserRepository : IUserRepository
     {
         /// <summary>
-        /// 连接对象
+        /// 数据库对象
         /// </summary>
-        IDbConnection _dbConnection;
-        public UserRepository(IDbConnection dbConnection, string connectionString)
+        IWorkingDB _workingDB;
+   
+        public UserRepository(IWorkingDB workingDB)
         {
-            dbConnection.ConnectionString = connectionString;
-            _dbConnection = dbConnection;
+            _workingDB = workingDB;
 
         }
         /// <summary>
@@ -34,7 +34,7 @@ namespace Working.Models.Repository
         public UserRole Login(string userName, string password)
         {
 
-            var userRole = _dbConnection.Query<UserRole>("select users.*,roles.rolename from users join roles on users.roleid=roles.id where username=@username and password=@password", new { username = userName, password = password }).SingleOrDefault();
+            var userRole = _workingDB.Query<UserRole>("select users.*,roles.rolename from users join roles on users.roleid=roles.id where username=@username and password=@password", new { username = userName, password = password }).SingleOrDefault();
             if (userRole == null)
             {
                 throw new Exception("用户名或密码错误！");
@@ -53,7 +53,7 @@ namespace Working.Models.Repository
 
         public List<User> GetUsersByDepartmentID(int departmentID)
         {
-            return _dbConnection.Query<User>("select * from users where departmentid=@departmentid", new { departmentid = departmentID }).ToList();
+            return _workingDB.Query<User>("select * from users where departmentid=@departmentid", new { departmentid = departmentID }).ToList();
         }
         /// <summary>
         /// 按ID获取用户
@@ -62,7 +62,7 @@ namespace Working.Models.Repository
         /// <returns></returns>
         public User GetUser(int userID)
         {
-            return _dbConnection.Query<User>("select * from users where id=@id", new { id = userID }).SingleOrDefault();
+            return _workingDB.Query<User>("select * from users where id=@id", new { id = userID }).SingleOrDefault();
         }
         /// <summary>
         /// 修改密码
@@ -72,7 +72,7 @@ namespace Working.Models.Repository
         /// <returns></returns>
         public bool ModifyPassword(string newPassword, int userID)
         {
-            return _dbConnection.Execute("update users set password=@password where id=@id", new { password = newPassword, id = userID }) > 0;
+            return _workingDB.Execute("update users set password=@password where id=@id", new { password = newPassword, id = userID }) > 0;
         }
         /// <summary>
         /// 查询全部门
@@ -80,7 +80,7 @@ namespace Working.Models.Repository
         /// <returns></returns>
         public List<UserRole> GetDepartmentUsers(int departmentID)
         {
-            return _dbConnection.Query<UserRole>("select users.*,roles.rolename from users join roles on users.roleid=roles.id where users.departmentid=@departmentid", new { departmentid = departmentID }).ToList();
+            return _workingDB.Query<UserRole>("select users.*,roles.rolename from users join roles on users.roleid=roles.id where users.departmentid=@departmentid", new { departmentid = departmentID }).ToList();
 
         }
 
@@ -91,8 +91,16 @@ namespace Working.Models.Repository
         /// <returns></returns>
         public bool AddUser(User user)
         {
-            user.Password = user.UserName;
-            return _dbConnection.Execute("insert into users(roleid,departmentid,name,username,password) values(@roleid,@departmentid,@name,@username,@password)", new { roleid = user.RoleID, departmentid = user.DepartmentID, name = user.Name, username = user.UserName, password = user.Password, }) > 0;
+            if (user == null)
+            {
+                throw new Exception("添加的用户不能为Null");
+            }
+            else
+            {
+                user.Password = user.UserName;
+                var result = _workingDB.Execute("insert into users(roleid,departmentid,name,username,password) values(@roleid,@departmentid,@name,@username,@password)", new { roleid = user.RoleID, departmentid = user.DepartmentID, name = user.Name, username = user.UserName, password = user.Password, });
+                return result> 0;
+            }
         }
         /// <summary>
         /// 修改用户
@@ -101,7 +109,7 @@ namespace Working.Models.Repository
         /// <returns></returns>
         public bool ModifyUser(User user)
         {
-            return _dbConnection.Execute("update users set roleid=@roleid,departmentid=@departmentid,name=@name,username=@username,password=@password where id=@id", new { roleid = user.RoleID, departmentid = user.DepartmentID, name = user.Name, username = user.UserName, password = user.Password, id = user.ID }) > 0;
+            return _workingDB.Execute("update users set roleid=@roleid,departmentid=@departmentid,name=@name,username=@username,password=@password where id=@id", new { roleid = user.RoleID, departmentid = user.DepartmentID, name = user.Name, username = user.UserName, password = user.Password, id = user.ID }) > 0;
         }
         /// <summary>
         /// 删除用户
@@ -110,7 +118,7 @@ namespace Working.Models.Repository
         /// <returns></returns>
         public bool RemoveUser(int userID)
         {
-            return _dbConnection.Execute("delete from users where id=@id", new { id = userID }) > 0;
+            return _workingDB.Execute("delete from users where id=@id", new { id = userID }) > 0;
         }
     }
 }

@@ -14,13 +14,12 @@ namespace Working.Models.Repository
     public class DepartmentRepository : IDepartmentRepository
     {
         /// <summary>
-        /// 连接对象
+        /// 数据库对象
         /// </summary>
-        IDbConnection _dbConnection;
-        public DepartmentRepository(IDbConnection dbConnection, string connectionString)
+        IWorkingDB _workingDB;
+        public DepartmentRepository(IWorkingDB workingDB)
         {
-            dbConnection.ConnectionString = connectionString;
-            _dbConnection = dbConnection;
+            _workingDB = workingDB;
         }
 
         /// <summary>
@@ -29,7 +28,7 @@ namespace Working.Models.Repository
         /// <returns></returns>
         public List<FullDepartment> GetAllPDepartment()
         {
-            return _dbConnection.Query<FullDepartment>("select d.*,pd.departmentname as pdepartmentname from departments as d join departments as pd on d.pdepartmentid=pd.id ").ToList();
+            return _workingDB.Query<FullDepartment>("select d.*,pd.departmentname as pdepartmentname from departments as d join departments as pd on d.pdepartmentid=pd.id ").ToList();
         }
         /// <summary>
         /// 查询部门
@@ -37,7 +36,7 @@ namespace Working.Models.Repository
         /// <returns></returns>
         public List<Department> GetAllDepartment()
         {
-            return _dbConnection.Query<Department>("select * from departments").ToList();
+            return _workingDB.Query<Department>("select * from departments").ToList();
         }
         /// <summary>
         /// 添加部门
@@ -46,7 +45,7 @@ namespace Working.Models.Repository
         /// <returns></returns>
         public bool AddDepartment(Department department)
         {
-            return _dbConnection.Execute("insert into departments(departmentname,pdepartmentid) values(@departmentname,@pdepartmentid)", new { departmentname = department.DepartmentName, pdepartmentid = department.PDepartmentID }) > 0;
+            return _workingDB.Execute("insert into departments(departmentname,pdepartmentid) values(@departmentname,@pdepartmentid)", new { departmentname = department.DepartmentName, pdepartmentid = department.PDepartmentID }) > 0;
         }
 
         /// <summary>
@@ -56,7 +55,7 @@ namespace Working.Models.Repository
         /// <returns></returns>
         public bool ModifyDepartment(Department department)
         {
-            return _dbConnection.Execute("update departments set departmentname=@departmentname,pdepartmentid=@pdepartmentid where id=@id", new { departmentname = department.DepartmentName, pdepartmentid = department.PDepartmentID, id = department.ID }) > 0;
+            return _workingDB.Execute("update departments set departmentname=@departmentname,pdepartmentid=@pdepartmentid where id=@id", new { departmentname = department.DepartmentName, pdepartmentid = department.PDepartmentID, id = department.ID }) > 0;
         }
         /// <summary>
         /// 删除部门
@@ -65,7 +64,7 @@ namespace Working.Models.Repository
         /// <returns></returns>
         public bool RemoveDepartment(int departmentID)
         {
-            return _dbConnection.Execute("delete from departments where id=@id", new { id = departmentID }) > 0;
+            return _workingDB.Execute("delete from departments where id=@id", new { id = departmentID }) > 0;
         }
 
         /// <summary>
@@ -76,7 +75,7 @@ namespace Working.Models.Repository
         public List<Department> GetDeparmentByPID(int departmentID)
         {
             var departments = new List<Department>();
-            departments.AddRange(_dbConnection.Query<Department>("select * from departments where id=@id", new { id = departmentID }));
+            departments.AddRange(_workingDB.Query<Department>("select * from departments where id=@id", new { id = departmentID }));
             departments.AddRange(GetChildDeaprtment(departmentID));
             return departments;
         }
@@ -88,7 +87,7 @@ namespace Working.Models.Repository
         List<Department> GetChildDeaprtment(int departmentID)
         {
             var departments = new List<Department>();
-            var childDepartments = _dbConnection.Query<Department>("select * from departments where PDepartmentID=@id", new { id = departmentID }).ToList();
+            var childDepartments = _workingDB.Query<Department>("select * from departments where PDepartmentID=@id", new { id = departmentID }).ToList();
 
             departments.AddRange(childDepartments);
             foreach (var department in childDepartments)

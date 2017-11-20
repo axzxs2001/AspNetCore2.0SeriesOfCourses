@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <None Include="Moq.Dapper.csproj" />
+    <None Include="wwwroot\lib\vue\dist\README.md" />
   </ItemGroup>
 
   <ItemGroup>

@@ -14,13 +14,12 @@ namespace Working.Models.Repository
     public class RoleRepository : IRoleRepository
     {
         /// <summary>
-        /// 连接对象
+        /// 数据库对象
         /// </summary>
-        IDbConnection _dbConnection;
-        public RoleRepository(IDbConnection dbConnection, string connectionString)
+        IWorkingDB _workingDB;
+        public RoleRepository(IWorkingDB workingDB)
         {
-            dbConnection.ConnectionString = connectionString;
-            _dbConnection = dbConnection;
+            _workingDB = workingDB;
 
         }
         /// <summary>
@@ -29,7 +28,7 @@ namespace Working.Models.Repository
         /// <returns></returns>
         public List<Role> GetRoles()
         {
-            return _dbConnection.Query<Role>("select * from roles").ToList();
+            return _workingDB.Query<Role>("select * from roles").ToList();
         }
 
     }

@@ -25,7 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DotNetCore.Moq.Dapper\DotNetCore.Moq.Dapper.csproj" />
     <ProjectReference Include="..\Working\Working.csproj" />
   </ItemGroup>
 

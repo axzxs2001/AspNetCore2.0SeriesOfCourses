@@ -15,6 +15,14 @@ namespace Working.XUnitTest
     [Trait("仓储层", "UserRepository")]
     public class UserRepositoryTest
     {
+        Mock<IWorkingDB> _dbMock;
+        UserRepository _userRepository;
+        public UserRepositoryTest()
+        {
+            _dbMock = new Mock<IWorkingDB>();
+            _userRepository = new UserRepository(_dbMock.Object);
+        }
+
         #region 登录测试
         /// <summary>
         /// 测试登录正常值
@@ -22,15 +30,11 @@ namespace Working.XUnitTest
         [Fact]
         public void Login_Default_Return()
         {
-            var dbMock = new Mock<IDbConnection>();
-            var userRepository = new UserRepository(dbMock.Object, "");
-
             var list = new List<UserRole>() {
                 new UserRole{ ID=1, Name="桂素伟", DepartmentID=1, Password="gsw", RoleID=1, RoleName="Leader", UserName="gsw" }
             };
-           dbMock.SetupDapper(db => db.Query<UserRole>(It.IsAny<string>(), null, null, true, null, null)).Returns(list);
-
-            var userRole = userRepository.Login("gsw", "gsw");
+           _dbMock.Setup(db => db.Query<UserRole>(It.IsAny<string>(), It.IsAny<object>(), null, true, null, null)).Returns(list);
+            var userRole = _userRepository.Login("gsw", "gsw");
 
             Assert.NotNull(userRole);
 
@@ -42,13 +46,9 @@ namespace Working.XUnitTest
         [Fact]
         public void Login_Null_ThrowException()
         {
-            var dbMock = new Mock<IDbConnection>();
-            var userRepository = new UserRepository(dbMock.Object, "");
-
             var list = new List<UserRole>();
-            dbMock.SetupDapper(db => db.Query<UserRole>(It.IsAny<string>(), null, null, true, null, null)).Returns(list);
-
-            var exc = Assert.Throws<Exception>(() => { userRepository.Login("gsw", "gsw"); });
+            _dbMock.Setup(db => db.Query<UserRole>(It.IsAny<string>(), null, null, true, null, null)).Returns(list);
+            var exc = Assert.Throws<Exception>(() => { _userRepository.Login("gsw", "gsw"); });
 
             Assert.Contains("用户名或密码错误！", exc.Message);
         }
@@ -57,17 +57,34 @@ namespace Working.XUnitTest
         /// </summary>
         [Fact]
         public void Login_Unkonow_ThrowException()
-        {
-            var dbMock = new Mock<IDbConnection>();
-            var userRepository = new UserRepository(dbMock.Object, "");
-
+        {  
             var list = new List<UserRole>();
-            dbMock.SetupGet(db=>db.ConnectionString).Throws(new Exception("未知"));
-            var exc = Assert.Throws<Exception>(() => { userRepository.Login("gsw", "gsw"); });
+            _dbMock.Setup(db=>db.Query<UserRole>(It.IsAny<string>(), It.IsAny<object>(), null,true,null,null)).Throws(new Exception("未知"));
+            var exc = Assert.Throws<Exception>(() => { _userRepository.Login("gsw", "gsw"); });
             Assert.Contains("未知", exc.Message);
         }
         #endregion
 
-       
+
+        /// <summary>
+        /// 测试异常添加
+        /// </summary>
+        [Fact]
+        public void AddUser_NullUser_ThrowException()
+        { 
+            var exception =Assert.Throws<Exception>(()=> { _userRepository.AddUser(null); });
+            Assert.Contains("添加的用户不能为Null", exception.Message);
+        }
+
+        /// <summary>
+        /// 测试异常添加
+        /// </summary>
+        [Fact]
+        public void AddUser_Default_ReturnTrue()
+        {
+            _dbMock.Setup(db => db.Execute(It.IsAny<string>(), It.IsAny<object>(), null, null, null)).Returns(1);       
+            var result = _userRepository.AddUser(new User { UserName = "test" });
+            Assert.True(result);
+        }
     }
 }

@@ -6,7 +6,6 @@ using Xunit;
 using Dapper;
 using Working.Models.DataModel;
 using System.Collections.Generic;
-using Moq.Dapper;
 using Working.Controllers;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;

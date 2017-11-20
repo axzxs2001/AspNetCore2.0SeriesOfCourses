@@ -6,7 +6,6 @@ using Xunit;
 using Dapper;
 using Working.Models.DataModel;
 using System.Collections.Generic;
-using Moq.Dapper;
 using System.Net.Http;
 using Microsoft.AspNetCore.Hosting;
 using System.Threading.Tasks;

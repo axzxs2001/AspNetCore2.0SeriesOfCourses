@@ -43,6 +43,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PPT", "PPT", "{D00F9CB8-10D
 		PPT\asp.net core2.0项目实战.pptx = PPT\asp.net core2.0项目实战.pptx
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetCore.Moq.Dapper", "DotNetCore.Moq.Dapper\DotNetCore.Moq.Dapper.csproj", "{FA7D4BA9-4870-4F1D-B51C-E13CBE79F051}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{CC6D1C6B-9768-4632-8A16-FE3A1D053EF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC6D1C6B-9768-4632-8A16-FE3A1D053EF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC6D1C6B-9768-4632-8A16-FE3A1D053EF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA7D4BA9-4870-4F1D-B51C-E13CBE79F051}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA7D4BA9-4870-4F1D-B51C-E13CBE79F051}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA7D4BA9-4870-4F1D-B51C-E13CBE79F051}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA7D4BA9-4870-4F1D-B51C-E13CBE79F051}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,6 +117,7 @@ Global
 		{919BE861-FA27-481C-922C-285C5F5314F0} = {F4EC96F5-017B-484D-A4F4-CAC7C753F7AD}
 		{CC6D1C6B-9768-4632-8A16-FE3A1D053EF0} = {F4EC96F5-017B-484D-A4F4-CAC7C753F7AD}
 		{D00F9CB8-10DE-49FA-8CE6-5ACB62871B8F} = {F4EC96F5-017B-484D-A4F4-CAC7C753F7AD}
+		{FA7D4BA9-4870-4F1D-B51C-E13CBE79F051} = {F4EC96F5-017B-484D-A4F4-CAC7C753F7AD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5F9DD074-D713-4B2B-B328-553FFED0F4AA}

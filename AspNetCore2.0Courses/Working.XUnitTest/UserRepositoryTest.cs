@@ -6,8 +6,7 @@ using Xunit;
 using Dapper;
 using Working.Models.DataModel;
 using System.Collections.Generic;
-using Moq.Dapper;
-
+using DotNetCore.Moq.Dapper;
 namespace Working.XUnitTest
 {
     /// <summary>
@@ -29,7 +28,7 @@ namespace Working.XUnitTest
             var list = new List<UserRole>() {
                 new UserRole{ ID=1, Name="¹ðËØÎ°", DepartmentID=1, Password="gsw", RoleID=1, RoleName="Leader", UserName="gsw" }
             };
-            dbMock.SetupDapper(db => db.Query<UserRole>(It.IsAny<string>(), null, null, true, null, null)).Returns(list);
+           dbMock.SetupDapper(db => db.Query<UserRole>(It.IsAny<string>(), null, null, true, null, null)).Returns(list);
 
             var userRole = userRepository.Login("gsw", "gsw");
 

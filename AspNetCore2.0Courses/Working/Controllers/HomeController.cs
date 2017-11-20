@@ -51,9 +51,7 @@ namespace Working.Controllers
         }
 
         public IActionResult Index()
-        {
-            _logger.LogInformation("这是HomeController下的Index Action");
-
+        {   
             return View();
         }
         [AllowAnonymous]
@@ -66,6 +64,7 @@ namespace Working.Controllers
         [HttpGet("login")]
         public IActionResult Login(string returnUrl)
         {
+            _logger.LogInformation("登录");
             if (!HttpContext.User.Identity.IsAuthenticated)
             {
                 ViewBag.returnUrl = returnUrl;
@@ -78,6 +77,7 @@ namespace Working.Controllers
         {
             try
             {
+                _logger.LogInformation($"登录：UserName={userName}");
                 var userRole = _userRepository.Login(userName, password);
                 var claims = new Claim[]
                 {
@@ -94,7 +94,7 @@ namespace Working.Controllers
             catch (Exception exc)
             {
                 ViewBag.error = exc.Message;
-
+                _logger.LogCritical(exc,$"登录异常：{ exc.Message}");
                 return  new ViewResult();              
 
             }
@@ -119,12 +119,14 @@ namespace Working.Controllers
         {
             try
             {
+                _logger.LogInformation("获取全部带父级部门的部门");
                 var list = _departmentRepository.GetAllPDepartment();
                 return ToJson(BackResult.Success, data: list);
 
             }
             catch (Exception exc)
             {
+                _logger.LogCritical(exc, $"获取全部带父级部门的部门：{ exc.Message}");
                 return ToJson(BackResult.Exception, message: exc.Message);
             }
         }
@@ -138,12 +140,14 @@ namespace Working.Controllers
         {
             try
             {
-                var list = _departmentRepository.GetAllDepartment();
+                _logger.LogInformation("获取全部带父级部门的部门");
+                  var list = _departmentRepository.GetAllDepartment();
                 return ToJson(BackResult.Success, data: list);
 
             }
             catch (Exception exc)
             {
+                _logger.LogCritical(exc, $"获取全部带父级部门的部门：{ exc.Message}");
                 return ToJson(BackResult.Exception, message: exc.Message);
             }
         }
@@ -159,11 +163,13 @@ namespace Working.Controllers
             try
             {
                 var result = _departmentRepository.AddDepartment(deparment);
+                _logger.LogInformation($"添加部门:{(result ? "添加成功" : "添加失败")}");
                 return ToJson(result ? BackResult.Success : BackResult.Fail, message: result ? "添加成功" : "添加失败");
 
             }
             catch (Exception exc)
             {
+                _logger.LogCritical(exc, $"添加部门：{ exc.Message}");
                 return ToJson(BackResult.Exception, message: exc.Message);
             }
         }
@@ -179,12 +185,15 @@ namespace Working.Controllers
         {
             try
             {
+         
                 var result = _departmentRepository.ModifyDepartment(department);
+                _logger.LogInformation($"修改部门:{(result ? "修改成功" : "修改失败")}");
                 return ToJson(result ? BackResult.Success : BackResult.Fail, message: result ? "修改成功" : "修改失败");
 
             }
             catch (Exception exc)
             {
+                _logger.LogCritical(exc, $"修改部门：{ exc.Message}");
                 return ToJson(BackResult.Exception, message: exc.Message);
             }
         }
@@ -201,11 +210,13 @@ namespace Working.Controllers
             try
             {
                 var result = _departmentRepository.RemoveDepartment(departmentID);
+                _logger.LogInformation($"删除部门:departmentID={departmentID},{(result ? "删除成功" : "删除失败")}");
                 return ToJson(result ? BackResult.Success : BackResult.Fail, message: result ? "删除成功" : "删除失败");
 
             }
             catch (Exception exc)
             {
+                _logger.LogCritical(exc, $"删除部门：{ exc.Message}");
                 return ToJson(BackResult.Exception, message: exc.Message);
             }
         }
@@ -230,6 +241,7 @@ namespace Working.Controllers
         {
             try
             {
+                _logger.LogInformation($"按年月查询某人工作记录:year={year},month={month}");
                 if (!string.IsNullOrEmpty(UserID))
                 {
                     var workItems = _workItemRepository.GetWorkItemByYearMonth(year, month, int.Parse(UserID));
@@ -237,20 +249,27 @@ namespace Working.Controllers
                 }
                 else
                 {
+                    _logger.LogError($"按年月查询某人工作记录:用户没有登录ID");
                     return ToJson(BackResult.Error, message: "用户没有登录ID");
                 }
             }
             catch (Exception exc)
             {
+                _logger.LogCritical(exc, $"按年月查询某人工作记录：{ exc.Message}");
                 return ToJson(BackResult.Exception, message: exc.Message);
             }
         }
-
+        /// <summary>
+        /// 添加工作记录
+        /// </summary>
+        /// <param name="workItem">工作记录</param>
+        /// <returns></returns>
         [HttpPost("addworkitem")]
         public IActionResult AddWorkItem(WorkItem workItem)
         {
             try
             {
+                _logger.LogInformation($"添加工作记录");
                 if (!string.IsNullOrEmpty(UserID))
                 {
                     var result = _workItemRepository.AddWorkItem(workItem, int.Parse(UserID));
@@ -258,12 +277,14 @@ namespace Working.Controllers
                 }
                 else
                 {
+                    _logger.LogError($"添加工作记录:用户没有登录ID");
                     return ToJson(BackResult.Error, message: "用户没有登录ID");
                 }
 
             }
             catch (Exception exc)
             {
+                _logger.LogCritical(exc, $"添加工作记录：{ exc.Message}");
                 return ToJson(BackResult.Exception, message: exc.Message);
             }
         }
@@ -285,6 +306,7 @@ namespace Working.Controllers
         {
             try
             {
+                _logger.LogInformation($"获取登录用户的所有下属部门");
                 if (!string.IsNullOrEmpty(DepartmentID))
                 {
                     var departments = _departmentRepository.GetDeparmentByPID(int.Parse(DepartmentID));
@@ -292,11 +314,13 @@ namespace Working.Controllers
                 }
                 else
                 {
+                    _logger.LogError($"获取登录用户的所有下属部门：没有登录用户的部门ID");
                     return ToJson(BackResult.Error, message: "没有登录用户的部门ID");
                 }
             }
             catch (Exception exc)
             {
+                _logger.LogCritical(exc, $"获取登录用户的所有下属部门：{ exc.Message}");
                 return ToJson(BackResult.Exception, message: exc.Message);
             }
         }
@@ -310,12 +334,14 @@ namespace Working.Controllers
         {
             try
             {
+                _logger.LogInformation($"按部门ID获取用户:departmentID={departmentID}");
                 var users = _userRepository.GetUsersByDepartmentID(departmentID);
                 return ToJson(BackResult.Success, data: users);
 
             }
             catch (Exception exc)
             {
+                _logger.LogCritical(exc, $"按部门ID获取用户：{ exc.Message}");
                 return ToJson(BackResult.Exception, message: exc.Message);
             }
         }
@@ -331,13 +357,14 @@ namespace Working.Controllers
         {
             try
             {
-
+                _logger.LogInformation($"按年月用户查询工作记录:year={year},month={month},userid={UserID}");
                 var workItems = _workItemRepository.GetWorkItemByYearMonth(year, month, userID);
                 return ToJson(BackResult.Success, data: workItems);
 
             }
             catch (Exception exc)
             {
+                _logger.LogCritical(exc, $"按年月用户查询工作记录：{ exc.Message}");
                 return ToJson(BackResult.Exception, message: exc.Message);
             }
         }
@@ -362,11 +389,13 @@ namespace Working.Controllers
         {
             try
             {
+                _logger.LogInformation($"按部分获取用户");
                 var users = _userRepository.GetDepartmentUsers(departmentID);
                 return ToJson(BackResult.Success, data: users);
             }
             catch (Exception exc)
             {
+                _logger.LogCritical(exc, $"按部分获取用户：{ exc.Message}");
                 return ToJson(BackResult.Exception, message: exc.Message);
             }
         }
@@ -379,11 +408,13 @@ namespace Working.Controllers
         {
             try
             {
+                _logger.LogInformation($"查询全部角色");
                 var roles = _roleRepository.GetRoles();
                 return ToJson(BackResult.Success, data: roles);
             }
             catch (Exception exc)
             {
+                _logger.LogCritical(exc, $"查询全部角色：{ exc.Message}");
                 return ToJson(BackResult.Exception, message: exc.Message);
             }
 
@@ -400,10 +431,12 @@ namespace Working.Controllers
             try
             {
                 var result = _userRepository.AddUser(user);
-                return ToJson(result ? BackResult.Success : BackResult.Fail, data: result ? "添加成功" : "添加失败");
+                _logger.LogInformation($"添加用户:{(result ? "添加成功" : "添加失败")}");
+                return ToJson(result ? BackResult.Success : BackResult.Fail, message: result ? "添加成功" : "添加失败");
             }
             catch (Exception exc)
             {
+                _logger.LogCritical(exc, $"添加用户：{ exc.Message}");
                 return ToJson(BackResult.Exception, message: exc.Message);
             }
         }
@@ -419,10 +452,12 @@ namespace Working.Controllers
             try
             {
                 var result = _userRepository.ModifyUser(user);
+                _logger.LogInformation($"修改用户{ (result ? "修改成功" : "修改失败")}");
                 return ToJson(result ? BackResult.Success : BackResult.Fail, data: result ? "修改成功" : "修改失败");
             }
             catch (Exception exc)
             {
+                _logger.LogCritical(exc, $"修改用户：{ exc.Message}");
                 return ToJson(BackResult.Exception, message: exc.Message);
             }
         }
@@ -437,11 +472,14 @@ namespace Working.Controllers
         {
             try
             {
+        
                 var result = _userRepository.RemoveUser(userID);
+                _logger.LogInformation($"删除用户： {(result ? "删除成功" : "删除失败")}");
                 return ToJson(result ? BackResult.Success : BackResult.Fail, data: result ? "删除成功" : "删除失败");
             }
             catch (Exception exc)
             {
+                _logger.LogCritical(exc, $"删除用户：{ exc.Message}");
                 return ToJson(BackResult.Exception, message: exc.Message);
             }
         }

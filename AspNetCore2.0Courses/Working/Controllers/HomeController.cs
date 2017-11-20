@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Working.Models.Repository;
 using Working.Models.DataModel;
+using Newtonsoft.Json;
 
 namespace Working.Controllers
 {
@@ -99,6 +100,67 @@ namespace Working.Controllers
 
             }
         }
+        /// <summary>
+        /// 登出
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            _logger.LogInformation($"{User.Identity.Name}登出");
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
+        }
+        /// <summary>
+        /// 修改密码
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("modifypassword")]
+        public IActionResult ModifyPassword()
+        {
+            return View();
+        }
+        /// <summary>
+        /// 修改密码
+        /// </summary>
+        /// <param name="oldPassword">旧密码</param>
+        /// <param name="newPassword">新密码</param>
+        /// <returns></returns>
+        [HttpPost("modifypassword")]
+        public IActionResult ModifyPassword(string oldPassword, string newPassword)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(UserID))
+                {
+                    var user = _userRepository.GetUser(int.Parse(UserID));
+                    if (user.Password == oldPassword)
+                    {
+                        var result = _userRepository.ModifyPassword(newPassword, int.Parse(UserID));
+                        _logger.LogInformation($"修改密码:{(result ? "修改密码成功" : "修改密码失败")}");
+                        return ToJson( BackResult.Success,message: result?"修改密码成功":"修改密码失败");
+                    }
+                    else
+                    {
+                        _logger.LogInformation($"修改密码:修改密码失败:旧密码不正确");
+                        return ToJson(BackResult.Fail,message:"修改密码失败:旧密码不正确！");
+                    }                 
+                }
+                else
+                {
+                    _logger.LogError($"修改密码:用户没有登录ID");
+                    return ToJson(BackResult.Error, message: "用户没有登录ID");
+                }
+               
+               
+            }
+            catch (Exception exc)
+            {
+                _logger.LogCritical(exc, $"修改密码：{ exc.Message}");
+                return ToJson(BackResult.Exception, message: exc.Message);
+            }
+        }
+
         #endregion
 
 

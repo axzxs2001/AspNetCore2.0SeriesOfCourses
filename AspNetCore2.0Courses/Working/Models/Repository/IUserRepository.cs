@@ -25,7 +25,19 @@ namespace Working.Models.Repository
         /// <param name="departmentID">部门ID</param>
         /// <returns></returns>
         List<User> GetUsersByDepartmentID(int departmentID);
-
+        /// <summary>
+        /// 按ID获取用户
+        /// </summary>
+        /// <param name="userID">用户ID</param>
+        /// <returns></returns>
+        User GetUser(int userID);
+        /// <summary>
+        /// 修改密码
+        /// </summary>
+        /// <param name="newPassword">新密码</param>
+        /// <param name="userID">用户ID</param>
+        /// <returns></returns>
+        bool ModifyPassword(string newPassword, int userID);
         /// <summary>
         /// 添加用户
         /// </summary>

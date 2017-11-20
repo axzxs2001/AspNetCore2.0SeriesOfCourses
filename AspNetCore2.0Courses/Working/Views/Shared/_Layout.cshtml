@@ -44,8 +44,8 @@
                     }
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a asp-area="" asp-controller="" asp-action="">登录用户：@User.Identity.Name</a></li>
-
+                    <li><a asp-area="" asp-controller="Home" asp-action="modifypassword">登录用户：@User.Identity.Name</a></li>
+                    <li role="presentation"><a href="/logout">注销</a></li>
                 </ul>
             </div>
         </div>

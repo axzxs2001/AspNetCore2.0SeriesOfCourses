@@ -55,15 +55,32 @@ namespace Working.Models.Repository
         {
             return _dbConnection.Query<User>("select * from users where departmentid=@departmentid", new { departmentid = departmentID }).ToList();
         }
-
-
+        /// <summary>
+        /// 按ID获取用户
+        /// </summary>
+        /// <param name="userID">用户ID</param>
+        /// <returns></returns>
+        public User GetUser(int userID)
+        {
+            return _dbConnection.Query<User>("select * from users where id=@id", new { id = userID }).SingleOrDefault();
+        }
+        /// <summary>
+        /// 修改密码
+        /// </summary>
+        /// <param name="newPassword">新密码</param>
+        /// <param name="userID">用户ID</param>
+        /// <returns></returns>
+        public bool ModifyPassword(string newPassword, int userID)
+        {
+            return _dbConnection.Execute("update users set password=@password where id=@id", new { password = newPassword, id = userID }) > 0;
+        }
         /// <summary>
         /// 查询全部门
         /// </summary>
         /// <returns></returns>
         public List<UserRole> GetDepartmentUsers(int departmentID)
         {
-            return _dbConnection.Query<UserRole>("select users.*,roles.rolename from users join roles on users.roleid=roles.id where users.departmentid=@departmentid",new { departmentid= departmentID }).ToList();
+            return _dbConnection.Query<UserRole>("select users.*,roles.rolename from users join roles on users.roleid=roles.id where users.departmentid=@departmentid", new { departmentid = departmentID }).ToList();
 
         }
 

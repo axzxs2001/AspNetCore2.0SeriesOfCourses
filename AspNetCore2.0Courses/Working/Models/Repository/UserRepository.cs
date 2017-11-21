@@ -109,7 +109,14 @@ namespace Working.Models.Repository
         /// <returns></returns>
         public bool ModifyUser(User user)
         {
-            return _workingDB.Execute("update users set roleid=@roleid,departmentid=@departmentid,name=@name,username=@username,password=@password where id=@id", new { roleid = user.RoleID, departmentid = user.DepartmentID, name = user.Name, username = user.UserName, password = user.Password, id = user.ID }) > 0;
+            if (user == null)
+            {
+                throw new Exception("修改的用户不能为Null");
+            }
+            else
+            {
+                return _workingDB.Execute("update users set roleid=@roleid,departmentid=@departmentid,name=@name,username=@username,password=@password where id=@id", new { roleid = user.RoleID, departmentid = user.DepartmentID, name = user.Name, username = user.UserName, password = user.Password, id = user.ID }) > 0;
+            }
         }
         /// <summary>
         /// 删除用户

@@ -19,7 +19,7 @@ namespace Working.Models.Repository
         /// 数据库对象
         /// </summary>
         IWorkingDB _workingDB;
-   
+
         public UserRepository(IWorkingDB workingDB)
         {
             _workingDB = workingDB;
@@ -70,9 +70,18 @@ namespace Working.Models.Repository
         /// <param name="newPassword">新密码</param>
         /// <param name="userID">用户ID</param>
         /// <returns></returns>
-        public bool ModifyPassword(string newPassword, int userID)
+        public bool ModifyPassword(string newPassword, string oldPassword, int userID)
         {
-            return _workingDB.Execute("update users set password=@password where id=@id", new { password = newPassword, id = userID }) > 0;
+            var user = GetUser(userID);
+            if (user!=null&&user.Password == oldPassword)
+            {
+
+                return _workingDB.Execute("update users set password=@password where id=@id", new { password = newPassword, id = userID }) > 0;
+            }
+            else
+            {
+               throw new Exception($"修改密码:修改密码失败:旧密码不正确");
+            }
         }
         /// <summary>
         /// 查询全部门
@@ -99,7 +108,7 @@ namespace Working.Models.Repository
             {
                 user.Password = user.UserName;
                 var result = _workingDB.Execute("insert into users(roleid,departmentid,name,username,password) values(@roleid,@departmentid,@name,@username,@password)", new { roleid = user.RoleID, departmentid = user.DepartmentID, name = user.Name, username = user.UserName, password = user.Password, });
-                return result> 0;
+                return result > 0;
             }
         }
         /// <summary>

@@ -52,7 +52,7 @@ namespace Working.Controllers
         }
 
         public IActionResult Index()
-        {   
+        {
             return View();
         }
         [AllowAnonymous]
@@ -95,8 +95,8 @@ namespace Working.Controllers
             catch (Exception exc)
             {
                 ViewBag.error = exc.Message;
-                _logger.LogCritical(exc,$"登录异常：{ exc.Message}");
-                return  new ViewResult();              
+                _logger.LogCritical(exc, $"登录异常：{ exc.Message}");
+                return new ViewResult();
 
             }
         }
@@ -131,28 +131,9 @@ namespace Working.Controllers
         {
             try
             {
-                if (!string.IsNullOrEmpty(UserID))
-                {
-                    var user = _userRepository.GetUser(int.Parse(UserID));
-                    if (user.Password == oldPassword)
-                    {
-                        var result = _userRepository.ModifyPassword(newPassword, int.Parse(UserID));
-                        _logger.LogInformation($"修改密码:{(result ? "修改密码成功" : "修改密码失败")}");
-                        return ToJson( BackResult.Success,message: result?"修改密码成功":"修改密码失败");
-                    }
-                    else
-                    {
-                        _logger.LogInformation($"修改密码:修改密码失败:旧密码不正确");
-                        return ToJson(BackResult.Fail,message:"修改密码失败:旧密码不正确！");
-                    }                 
-                }
-                else
-                {
-                    _logger.LogError($"修改密码:用户没有登录ID");
-                    return ToJson(BackResult.Error, message: "用户没有登录ID");
-                }
-               
-               
+                var result = _userRepository.ModifyPassword(newPassword, oldPassword, UserID);
+                _logger.LogInformation($"修改密码:{(result ? "修改密码成功" : "修改密码失败")}");
+                return ToJson(BackResult.Success, message: result ? "修改密码成功" : "修改密码失败");
             }
             catch (Exception exc)
             {
@@ -160,9 +141,7 @@ namespace Working.Controllers
                 return ToJson(BackResult.Exception, message: exc.Message);
             }
         }
-
         #endregion
-
 
         #region 部门
         [Authorize(Roles = "Manager")]
@@ -175,7 +154,7 @@ namespace Working.Controllers
         /// 获取全部带父级部门的部门
         /// </summary>
         /// <returns></returns>
-     
+
         [HttpGet("getallpdepartment")]
         public IActionResult GetAllPDepartments()
         {
@@ -203,7 +182,7 @@ namespace Working.Controllers
             try
             {
                 _logger.LogInformation("获取全部带父级部门的部门");
-                  var list = _departmentRepository.GetAllDepartment();
+                var list = _departmentRepository.GetAllDepartment();
                 return ToJson(BackResult.Success, data: list);
 
             }
@@ -247,7 +226,7 @@ namespace Working.Controllers
         {
             try
             {
-         
+
                 var result = _departmentRepository.ModifyDepartment(department);
                 _logger.LogInformation($"修改部门:{(result ? "修改成功" : "修改失败")}");
                 return ToJson(result ? BackResult.Success : BackResult.Fail, message: result ? "修改成功" : "修改失败");
@@ -304,16 +283,9 @@ namespace Working.Controllers
             try
             {
                 _logger.LogInformation($"按年月查询某人工作记录:year={year},month={month}");
-                if (!string.IsNullOrEmpty(UserID))
-                {
-                    var workItems = _workItemRepository.GetWorkItemByYearMonth(year, month, int.Parse(UserID));
-                    return ToJson(BackResult.Success, data: workItems);
-                }
-                else
-                {
-                    _logger.LogError($"按年月查询某人工作记录:用户没有登录ID");
-                    return ToJson(BackResult.Error, message: "用户没有登录ID");
-                }
+
+                var workItems = _workItemRepository.GetWorkItemByYearMonth(year, month, UserID);
+                return ToJson(BackResult.Success, data: workItems);
             }
             catch (Exception exc)
             {
@@ -332,16 +304,9 @@ namespace Working.Controllers
             try
             {
                 _logger.LogInformation($"添加工作记录");
-                if (!string.IsNullOrEmpty(UserID))
-                {
-                    var result = _workItemRepository.AddWorkItem(workItem, int.Parse(UserID));
-                    return ToJson(result ? BackResult.Success : BackResult.Fail, message: result ? "编辑成功" : "编辑失败");
-                }
-                else
-                {
-                    _logger.LogError($"添加工作记录:用户没有登录ID");
-                    return ToJson(BackResult.Error, message: "用户没有登录ID");
-                }
+
+                var result = _workItemRepository.AddWorkItem(workItem, UserID);
+                return ToJson(result ? BackResult.Success : BackResult.Fail, message: result ? "编辑成功" : "编辑失败");
 
             }
             catch (Exception exc)
@@ -369,16 +334,8 @@ namespace Working.Controllers
             try
             {
                 _logger.LogInformation($"获取登录用户的所有下属部门");
-                if (!string.IsNullOrEmpty(DepartmentID))
-                {
-                    var departments = _departmentRepository.GetDeparmentByPID(int.Parse(DepartmentID));
-                    return ToJson(BackResult.Success, data: departments);
-                }
-                else
-                {
-                    _logger.LogError($"获取登录用户的所有下属部门：没有登录用户的部门ID");
-                    return ToJson(BackResult.Error, message: "没有登录用户的部门ID");
-                }
+                var departments = _departmentRepository.GetDeparmentByPID(DepartmentID);
+                return ToJson(BackResult.Success, data: departments);
             }
             catch (Exception exc)
             {
@@ -534,7 +491,7 @@ namespace Working.Controllers
         {
             try
             {
-        
+
                 var result = _userRepository.RemoveUser(userID);
                 _logger.LogInformation($"删除用户： {(result ? "删除成功" : "删除失败")}");
                 return ToJson(result ? BackResult.Success : BackResult.Fail, data: result ? "删除成功" : "删除失败");

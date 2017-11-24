@@ -18,9 +18,9 @@ namespace Working.Controllers
         /// <param name="data">返回数据</param>
         /// <param name="dataFormat">日期格式</param>
         /// <returns></returns>
-        protected JsonResult ToJson(BackResult backResult,string message="",dynamic data=null,string dataFormat= "yyyy年MM月dd日")
+        protected JsonResult ToJson(BackResult backResult, string message = "", dynamic data = null, string dataFormat = "yyyy年MM月dd日")
         {
-            return new JsonResult(new { result =(int)backResult,data=data, message = message }, new Newtonsoft.Json.JsonSerializerSettings()
+            return new JsonResult(new { result = (int)backResult, data = data, message = message }, new Newtonsoft.Json.JsonSerializerSettings()
             {
                 ContractResolver = new LowercaseContractResolver(),
                 DateFormatString = dataFormat
@@ -29,22 +29,56 @@ namespace Working.Controllers
         /// <summary>
         /// 登录人的用户ID
         /// </summary>
-        protected string UserID
+        protected int UserID
         {
             get
             {
-                return User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Sid)?.Value;
+                var userIDString = User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Sid)?.Value;
+                if (string.IsNullOrEmpty(userIDString))
+                {
+                    throw new Exception("没有用户ID，请确认用户是否登录");
+                }
+                else
+                {
+                    int userID = 0;
+                    var result = int.TryParse(userIDString, out userID);
+                    if(result)
+                    {
+                        return userID;
+                    }
+                    else
+                    {
+                        throw new Exception("用户ID为非整型，请确认");
+                    }
+                }
             }
         }
 
         /// <summary>
         /// 登录人的部门ID
         /// </summary>
-        protected string DepartmentID
-        {
+        protected int DepartmentID
+        { 
             get
             {
-                return User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.GroupSid)?.Value;
+                var userIDString = User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.GroupSid)?.Value;
+                if (string.IsNullOrEmpty(userIDString))
+                {
+                    throw new Exception("没有用部门ID，请确认用户是否登录");
+                }
+                else
+                {
+                    int userID = 0;
+                    var result = int.TryParse(userIDString, out userID);
+                    if (result)
+                    {
+                        return userID;
+                    }
+                    else
+                    {
+                        throw new Exception("部门ID为非整型，请确认");
+                    }
+                }
             }
         }
     }

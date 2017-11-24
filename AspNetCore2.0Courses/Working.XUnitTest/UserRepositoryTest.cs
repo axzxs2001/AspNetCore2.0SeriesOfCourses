@@ -65,7 +65,6 @@ namespace Working.XUnitTest
         }
         #endregion
 
-
         #region 添加用户测试
         /// <summary>
         /// 测试异常添加
@@ -129,5 +128,47 @@ namespace Working.XUnitTest
             Assert.Equal(userID == 1, result);
         }
         #endregion
+
+        #region 按部门查询用户测试，按ID获取用户测试，查询全部门测试
+        /// <summary>
+        /// 按部门ID查询用户测试
+        /// </summary>
+        [Fact]
+        public void GetUsersByDepartmentID_Default_Return()
+        {
+            var list = new List<User>() { new User { ID = 1, Name = "桂素伟", DepartmentID = 1, Password = "gsw", RoleID = 1, UserName = "gsw" } };
+            _dbMock.Setup(db => db.Query<User>(It.IsAny<string>(), It.IsAny<object>(), null, true, null, null)).Returns(list);
+            var users = _userRepository.GetUsersByDepartmentID(1);
+            Assert.Single(list);
+        }
+
+        /// <summary>
+        /// 按ID获取用户测试
+        /// </summary>
+        [Fact]
+        public void GetUser_Default_Return()
+        {
+            var list = new List<User>() { new User { ID = 1, Name = "桂素伟", DepartmentID = 1, Password = "gsw", RoleID = 1, UserName = "gsw" } };
+            _dbMock.Setup(db => db.Query<User>(It.IsAny<string>(), It.IsAny<object>(), null, true, null, null)).Returns(list);
+            var users = _userRepository.GetUser(1);
+            Assert.Single(list);
+        }
+        /// <summary>
+        /// 查询全部门测试
+        /// </summary>
+        [Fact]
+        public void GetDepartmentUsers_Default_Return()
+        {
+            var list = new List<UserRole>() {
+                new UserRole{ ID=1, Name="桂素伟", DepartmentID=1, Password="gsw", RoleID=1, RoleName="Leader", UserName="gsw" }
+            };
+            _dbMock.Setup(db => db.Query<UserRole>(It.IsAny<string>(), It.IsAny<object>(), null, true, null, null)).Returns(list);
+            var users = _userRepository.GetDepartmentUsers(1);
+            Assert.Single(list);
+        }
+        #endregion
+
+
+
     }
 }

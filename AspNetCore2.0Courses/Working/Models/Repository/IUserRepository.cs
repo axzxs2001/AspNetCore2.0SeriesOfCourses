@@ -37,7 +37,7 @@ namespace Working.Models.Repository
         /// <param name="newPassword">新密码</param>
         /// <param name="userID">用户ID</param>
         /// <returns></returns>
-        bool ModifyPassword(string newPassword, int userID);
+        bool ModifyPassword(string newPassword, string oldPassword, int userID);
         /// <summary>
         /// 添加用户
         /// </summary>

@@ -111,7 +111,7 @@ namespace Working.XUnitTest
         }
         #endregion
 
-        #region 修改用户测试     
+        #region 修改用户测试 ,修改密码测试    
 
         /// <summary>
         /// 测试用户修改
@@ -129,6 +129,31 @@ namespace Working.XUnitTest
         }
         #endregion
 
+        /// <summary>
+        /// 修改用户密码正确测试
+        /// </summary>
+        [Fact]
+        public void ModifyPassword_Default_ReturnTrue()
+        {
+            var list = new List<User>() { new User { ID = 1, Name = "桂素伟", DepartmentID = 1, Password = "gsw", RoleID = 1, UserName = "gsw" } };
+            _dbMock.Setup(db => db.Query<User>(It.IsAny<string>(), It.IsAny<object>(), null, true, null, null)).Returns(list);
+
+            _dbMock.Setup(db => db.Execute(It.IsAny<string>(), It.IsAny<object>(), null, null, null)).Returns(1);
+            var result = _userRepository.ModifyPassword("ggg", "gsw", 1);
+            Assert.True(result);
+        }
+        /// <summary>
+        /// 修改用户密码异常测试
+        /// </summary>
+        [Fact]
+        public void ModifyPassword_NullUser_ThrowException()
+        {
+            var list = new List<User>();
+            _dbMock.Setup(db => db.Query<User>(It.IsAny<string>(), It.IsAny<object>(), null, true, null, null)).Returns(list);
+            _dbMock.Setup(db => db.Execute(It.IsAny<string>(), It.IsAny<object>(), null, null, null)).Returns(1);
+            var exc = Assert.Throws<Exception>(() => _userRepository.ModifyPassword("ggg", "gsw", 1));
+            Assert.Contains("修改密码:修改密码失败:旧密码不正确", exc.Message);
+        }
         #region 按部门查询用户测试，按ID获取用户测试，查询全部门测试
         /// <summary>
         /// 按部门ID查询用户测试

@@ -30,6 +30,5 @@ namespace Working.Models.Repository
         {
             return _workingDB.Query<Role>("select * from roles").ToList();
         }
-
     }
 }

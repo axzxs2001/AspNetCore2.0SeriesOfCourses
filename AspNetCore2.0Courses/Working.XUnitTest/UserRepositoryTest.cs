@@ -12,11 +12,17 @@ namespace Working.XUnitTest
     /// <summary>
     /// 用户仓储测试
     /// </summary>
-    [Trait("仓储层", "UserRepository")]
+    [Trait("用户仓储层", "UserRepository")]
     public class UserRepositoryTest
     {
+        /// <summary>
+        /// 数据库Mock对象
+        /// </summary>
         Mock<IWorkingDB> _dbMock;
-        UserRepository _userRepository;
+        /// <summary>
+        /// 用户仓储对象
+        /// </summary>
+        IUserRepository _userRepository;
         public UserRepositoryTest()
         {
             _dbMock = new Mock<IWorkingDB>();
@@ -127,7 +133,7 @@ namespace Working.XUnitTest
             var result = _userRepository.RemoveUser(userID);
             Assert.Equal(userID == 1, result);
         }
-        #endregion
+
 
         /// <summary>
         /// 修改用户密码正确测试
@@ -154,6 +160,9 @@ namespace Working.XUnitTest
             var exc = Assert.Throws<Exception>(() => _userRepository.ModifyPassword("ggg", "gsw", 1));
             Assert.Contains("修改密码:修改密码失败:旧密码不正确", exc.Message);
         }
+
+        #endregion
+
         #region 按部门查询用户测试，按ID获取用户测试，查询全部门测试
         /// <summary>
         /// 按部门ID查询用户测试
@@ -192,7 +201,6 @@ namespace Working.XUnitTest
             Assert.Single(list);
         }
         #endregion
-
 
 
     }

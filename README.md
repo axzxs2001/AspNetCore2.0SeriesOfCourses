@@ -1,6 +1,6 @@
 # AspNetCore2.0SeriesOfCourses
 ### 《asp.net core2.0系列课程》
-代码库中有ptt和Demo。
+代码库中有ptt和各个案例Demo。
 
 
 ### 《asp.net core项目课程》

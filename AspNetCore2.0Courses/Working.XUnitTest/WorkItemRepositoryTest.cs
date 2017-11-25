@@ -29,7 +29,7 @@ namespace Working.XUnitTest
             _workItemRepository = new WorkItemRepository(_dbMock.Object);
         }
         /// <summary>
-        /// 按部门ID查询用户测试
+        /// 按年月日用户ID查询
         /// </summary>
         [Fact]
         public void GetWorkItemByYearMonth_Default_Return()

@@ -47,9 +47,16 @@ namespace Working.XUnitTest
             serviceProviderMock
                 .Setup(_ => _.GetService(typeof(IAuthenticationService)))
                 .Returns(authServiceMock.Object);
+
+            var claims = new Claim[]
+              {                   
+                    new Claim(ClaimTypes.Sid,"1"),
+                   
+              };
             _homeController.ControllerContext.HttpContext = new DefaultHttpContext()
             {
-                RequestServices = serviceProviderMock.Object
+                RequestServices = serviceProviderMock.Object,
+                User=new ClaimsPrincipal (new ClaimsIdentity(claims))
             };
         }
         /// <summary>
@@ -66,7 +73,9 @@ namespace Working.XUnitTest
             Assert.Equal("/", redirectResult.Url);
 
         }
-
+        /// <summary>
+        /// 测试空用户
+        /// </summary>
         [Fact]
         public void Login_NullUsert_ReturnView()
         {
@@ -75,6 +84,24 @@ namespace Working.XUnitTest
             var viewResult = Assert.IsType<ViewResult>(result);          
             Assert.NotNull(viewResult);
         } 
+        /// <summary>
+        /// 修改密码单元测试
+        /// </summary>
+        /// <param name="newPassword">新密码</param>
+        /// <param name="oldPassword">旧蜜码</param>
+        /// <param name="result">结果</param>
+        [Theory]
+        [InlineData("a","b",true)]
+        [InlineData("b", "a", false)]
+        public void ModifyPassword_Default_Return(string newPassword,string oldPassword,bool result)
+        {
+            _userMock.Setup(u => u.ModifyPassword(newPassword, oldPassword, 1)).Returns(value: result);
+
+            var actionResult = _homeController.ModifyPassword(oldPassword,newPassword);
+            var jsonResult = Assert.IsType<JsonResult>(actionResult);
+
+            Assert.Contains(result?"修改密码成功":"修改密码失败",jsonResult.Value.ToString());
+        }
     }
 
 }

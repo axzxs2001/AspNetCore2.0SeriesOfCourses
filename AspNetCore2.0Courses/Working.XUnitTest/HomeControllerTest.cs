@@ -102,6 +102,32 @@ namespace Working.XUnitTest
 
             Assert.Contains(result?"修改密码成功":"修改密码失败",jsonResult.Value.ToString());
         }
+        /// <summary>
+        /// 修改密码异常测试
+        /// </summary>
+        [Fact]
+        public void ModifyPassword_Exception_ReturnMessage()
+        {
+            _userMock.Setup(u => u.ModifyPassword("a","b" , 1)).Throws(new Exception("异常")); 
+            var actionResult = _homeController.ModifyPassword("b", "a");
+            var jsonResult = Assert.IsType<JsonResult>(actionResult);
+            Assert.Contains("异常", jsonResult.Value.ToString());
+        }
+        /// <summary>
+        /// 获取带有父级部门的部门
+        /// </summary>
+        [Fact]
+        public void GetAllPDepartments_Default_Return()
+        {
+            var list = new List<FullDepartment>();
+            _departmentMock.Setup(d => d.GetAllPDepartment()).Returns(value: list);
+
+            var actionResult = _homeController.GetAllPDepartments();
+            var jsonResult = Assert.IsType<JsonResult>(actionResult);
+
+
+            Assert.Contains("result=1", jsonResult.Value.ToString());
+        }
     }
 
 }

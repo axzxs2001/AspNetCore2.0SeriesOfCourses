@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PPT", "PPT", "{1D904BA9-D13A-4C4B-AD45-6A254AF3FE4B}"
 	ProjectSection(SolutionItems) = preProject
@@ -16,11 +16,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PermissionDemo", "Permissio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PermissionMiddlewareDemo", "PermissionMiddlewareDemo\PermissionMiddlewareDemo.csproj", "{2B04F810-6B0B-4EED-8854-71312E3ADB15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCoreSqlDemo", "EFCoreSqlDemo\EFCoreSqlDemo.csproj", "{24131113-5343-4D5E-B671-95722328889F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCoreSqlDemo", "EFCoreSqlDemo\EFCoreSqlDemo.csproj", "{24131113-5343-4D5E-B671-95722328889F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCoreSqlDemo01", "EFCoreSqlDemo01\EFCoreSqlDemo01.csproj", "{267FD579-D7BB-437D-9D0B-120EEB4F700B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCoreSqlDemo01", "EFCoreSqlDemo01\EFCoreSqlDemo01.csproj", "{267FD579-D7BB-437D-9D0B-120EEB4F700B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCoreSqliteDemo", "EFCoreSqliteDemo\EFCoreSqliteDemo.csproj", "{FA63EAAD-5E97-4F95-89E3-3D0BF37A7EF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCoreSqliteDemo", "EFCoreSqliteDemo\EFCoreSqliteDemo.csproj", "{FA63EAAD-5E97-4F95-89E3-3D0BF37A7EF8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DapperDemo", "DapperDemo\DapperDemo.csproj", "{3CA24A17-ED75-4056-9162-DDA1B93D0F78}"
 EndProject
@@ -42,6 +42,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PPT", "PPT", "{D00F9CB8-10D
 	ProjectSection(SolutionItems) = preProject
 		PPT\asp.net core2.0项目实战.pptx = PPT\asp.net core2.0项目实战.pptx
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{8FA26AE2-C861-45ED-A4B9-93AAC2948A09}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +95,10 @@ Global
 		{CC6D1C6B-9768-4632-8A16-FE3A1D053EF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC6D1C6B-9768-4632-8A16-FE3A1D053EF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC6D1C6B-9768-4632-8A16-FE3A1D053EF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FA26AE2-C861-45ED-A4B9-93AAC2948A09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FA26AE2-C861-45ED-A4B9-93AAC2948A09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FA26AE2-C861-45ED-A4B9-93AAC2948A09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FA26AE2-C861-45ED-A4B9-93AAC2948A09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,6 +117,7 @@ Global
 		{919BE861-FA27-481C-922C-285C5F5314F0} = {F4EC96F5-017B-484D-A4F4-CAC7C753F7AD}
 		{CC6D1C6B-9768-4632-8A16-FE3A1D053EF0} = {F4EC96F5-017B-484D-A4F4-CAC7C753F7AD}
 		{D00F9CB8-10DE-49FA-8CE6-5ACB62871B8F} = {F4EC96F5-017B-484D-A4F4-CAC7C753F7AD}
+		{8FA26AE2-C861-45ED-A4B9-93AAC2948A09} = {F4EC96F5-017B-484D-A4F4-CAC7C753F7AD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5F9DD074-D713-4B2B-B328-553FFED0F4AA}

@@ -64,7 +64,7 @@ namespace Working.XUnitTest
                 User = new ClaimsPrincipal(new ClaimsIdentity(claims))
             };
         }
- 
+
         #endregion
 
         #region 登录测试
@@ -129,7 +129,7 @@ namespace Working.XUnitTest
 
         #region  获取带有父级部门的部门测试
         /// <summary>
-        /// 获取带有父级部门的部门
+        /// 获取带有父级部门的部门测试
         /// </summary>
         [Fact]
         public void GetAllPDepartments_Default_Return()
@@ -142,12 +142,130 @@ namespace Working.XUnitTest
             Assert.Equal(1, result);
         }
 
-
+        /// <summary>
+        /// 获取带有父级部门的部门异常测试
+        /// </summary>
         [Fact]
         public void GetAllPDepartments_Exception_ReturnMessage()
         {
             _departmentMock.Setup(d => d.GetAllPDepartment()).Throws(new Exception("异常"));
             var actionResult = _homeController.GetAllPDepartments();
+            var jsonResult = Assert.IsType<JsonResult>(actionResult);
+            Assert.Contains("异常", jsonResult.Value.ToString());
+        }
+
+        /// <summary>
+        /// 获取全部部门测试
+        /// </summary>
+        [Fact]
+        public void GetAllDepartments_Default_Return()
+        {
+            var list = new List<Department>() { new Department { ID = 1, DepartmentName = "a", PDepartmentID = 0 } };
+            _departmentMock.Setup(d => d.GetAllDepartment()).Returns(value: list);
+            var actionResult = _homeController.GetAllDepartments();
+            var jsonResult = Assert.IsType<JsonResult>(actionResult);
+            var result = jsonResult.GetValue("result");
+            Assert.Equal(1, result);
+        }
+
+        /// <summary>
+        /// 获取全部部门异常测试
+        /// </summary>
+        [Fact]
+        public void GetAllDepartments_Exception_ReturnMessage()
+        {
+            _departmentMock.Setup(d => d.GetAllDepartment()).Throws(new Exception("异常"));
+            var actionResult = _homeController.GetAllDepartments();
+            var jsonResult = Assert.IsType<JsonResult>(actionResult);
+            Assert.Contains("异常", jsonResult.Value.ToString());
+        }
+        #endregion
+
+        #region 部门管理
+        /// <summary>
+        /// 添加部门测试
+        /// </summary>
+        [Theory]
+        [InlineData(1)]
+        [InlineData(0)]
+        public void AddDepartment_Default_Return(int result)
+        {
+            var department = new Department { ID = 1, DepartmentName = "a", PDepartmentID = 0 } ;
+            _departmentMock.Setup(d => d.AddDepartment(department)).Returns(value: result==1);
+            var actionResult = _homeController.AddDepartment(department);
+            var jsonResult = Assert.IsType<JsonResult>(actionResult);
+            var jResult = jsonResult.GetValue("result");
+            Assert.Equal(result, jResult);
+        }
+
+        /// <summary>
+        /// 添加部门异常测试
+        /// </summary>
+        [Fact]
+        public void AddDepartment_Exception_ReturnMessage()
+        {
+            _departmentMock.Setup(d => d.AddDepartment(null)).Throws(new Exception("异常"));
+            var actionResult = _homeController.AddDepartment(null);
+            var jsonResult = Assert.IsType<JsonResult>(actionResult);
+            Assert.Contains("异常", jsonResult.Value.ToString());
+        }
+
+
+
+        /// <summary>
+        /// 修改部门测试
+        /// </summary>
+        [Theory]
+        [InlineData(1)]
+        [InlineData(0)]
+        public void ModifyDepartment_Default_Return(int result)
+        {
+            var department = new Department { ID = 1, DepartmentName = "a", PDepartmentID = 0 };
+            _departmentMock.Setup(d => d.ModifyDepartment(department)).Returns(value: result == 1);
+            var actionResult = _homeController.ModifyDepartment(department);
+            var jsonResult = Assert.IsType<JsonResult>(actionResult);
+            var jResult = jsonResult.GetValue("result");
+            Assert.Equal(result, jResult);
+        }
+
+        /// <summary>
+        /// 修改部门异常测试
+        /// </summary>
+        [Fact]
+        public void ModifyDepartment_Exception_ReturnMessage()
+        {
+            _departmentMock.Setup(d => d.ModifyDepartment(null)).Throws(new Exception("异常"));
+            var actionResult = _homeController.ModifyDepartment(null);
+            var jsonResult = Assert.IsType<JsonResult>(actionResult);
+            Assert.Contains("异常", jsonResult.Value.ToString());
+        }
+
+
+
+        /// <summary>
+        /// 删除部门测试
+        /// </summary>
+        [Theory]
+        [InlineData(1)]
+        [InlineData(0)]
+        public void RemoveDepartment_Default_Return(int result)
+        {
+            var departmentID = 1;
+            _departmentMock.Setup(d => d.RemoveDepartment(departmentID)).Returns(value: result == 1);
+            var actionResult = _homeController.RemoveDepartment(departmentID);
+            var jsonResult = Assert.IsType<JsonResult>(actionResult);
+            var jResult = jsonResult.GetValue("result");
+            Assert.Equal(result, jResult);
+        }
+
+        /// <summary>
+        /// 删除部门异常测试
+        /// </summary>
+        [Fact]
+        public void RemoveDepartment_Exception_ReturnMessage()
+        {
+            _departmentMock.Setup(d => d.RemoveDepartment(1)).Throws(new Exception("异常"));
+            var actionResult = _homeController.RemoveDepartment(1);
             var jsonResult = Assert.IsType<JsonResult>(actionResult);
             Assert.Contains("异常", jsonResult.Value.ToString());
         }

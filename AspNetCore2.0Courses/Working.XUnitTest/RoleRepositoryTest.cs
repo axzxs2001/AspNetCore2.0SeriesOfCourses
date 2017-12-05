@@ -37,7 +37,7 @@ namespace Working.XUnitTest
             var list = new List<Role>() { new Role(),new Role()};
             _dbMock.Setup(db => db.Query<Role>(It.IsAny<string>(), null, null, true, null, null)).Returns(list);
             var roles = _roleRepository.GetRoles();
-            Assert.Equal(2,list.Count);
+            Assert.Equal(2,roles.Count);
         }
 
     }

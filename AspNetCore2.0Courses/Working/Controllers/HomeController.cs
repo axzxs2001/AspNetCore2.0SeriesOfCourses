@@ -133,7 +133,7 @@ namespace Working.Controllers
             {
                 var result = _userRepository.ModifyPassword(newPassword, oldPassword, UserID);
                 _logger.LogInformation($"修改密码:{(result ? "修改密码成功" : "修改密码失败")}");
-                return ToJson(BackResult.Success, message: result ? "修改密码成功" : "修改密码失败");
+                return ToJson(result ? BackResult.Success:BackResult.Fail, message: result ? "修改密码成功" : "修改密码失败");
             }
             catch (Exception exc)
             {

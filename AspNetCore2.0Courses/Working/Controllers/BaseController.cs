@@ -40,9 +40,8 @@ namespace Working.Controllers
                 }
                 else
                 {
-                    int userID = 0;
-                    var result = int.TryParse(userIDString, out userID);
-                    if(result)
+                    var result = int.TryParse(userIDString, out int userID);
+                    if (result)
                     {
                         return userID;
                     }
@@ -68,8 +67,7 @@ namespace Working.Controllers
                 }
                 else
                 {
-                    int userID = 0;
-                    var result = int.TryParse(userIDString, out userID);
+                    var result = int.TryParse(userIDString, out int userID);
                     if (result)
                     {
                         return userID;
